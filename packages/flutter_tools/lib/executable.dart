@@ -28,6 +28,7 @@ import 'src/commands/doctor.dart';
 import 'src/commands/downgrade.dart';
 import 'src/commands/drive.dart';
 import 'src/commands/emulators.dart';
+import 'src/commands/forge.dart';
 import 'src/commands/generate.dart';
 import 'src/commands/generate_localizations.dart';
 import 'src/commands/ide_config.dart';
@@ -205,6 +206,7 @@ List<FlutterCommand> generateCommands({
     logger: globals.logger
   ),
   CreateCommand(verboseHelp: verboseHelp),
+  ForgeCommand(verboseHelp: verboseHelp),
   DaemonCommand(hidden: !verboseHelp),
   DebugAdapterCommand(verboseHelp: verboseHelp),
   DevicesCommand(verboseHelp: verboseHelp),

@@ -1,0 +1,7 @@
+import 'package:base/base.dart';
+
+extension DoubleExtension on double? {
+  double orZero() => this ?? 0;
+
+  Decimal? toDecimalOrNull() => Decimal.tryParse(toString());
+}

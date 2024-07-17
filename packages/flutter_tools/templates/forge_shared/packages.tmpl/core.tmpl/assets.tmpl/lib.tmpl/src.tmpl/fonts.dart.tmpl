@@ -1,0 +1,40 @@
+import 'dart:ui';
+
+///
+/// Font family class
+/// To add a new font family,
+/// 1. Add a new static const String and add a new case in getFontFamilyByLocale
+/// 2. Add a new font family in the lib/fonts folder
+/// 3. Add a new font family in app level pubspec.yaml
+/// For example:
+///   fonts:
+///     - family: BricolageGrotesque
+///       fonts:
+///         - asset: packages/assets/fonts/BricolageGrotesque-Light.ttf
+///           weight: 300
+///         - asset: packages/assets/fonts/BricolageGrotesque-Regular.ttf
+///           weight: 400
+///         - asset: packages/assets/fonts/BricolageGrotesque-Medium.ttf
+///           weight: 500
+///         - asset: packages/assets/fonts/BricolageGrotesque-SemiBold.ttf
+///           weight: 600
+///         - asset: packages/assets/fonts/BricolageGrotesque-Bold.ttf
+///           weight: 700
+///         - asset: packages/assets/fonts/BricolageGrotesque-ExtraBold.ttf
+///           weight: 800
+///
+class {{className}}FontFamily {
+  {{className}}FontFamily._();
+
+  static const String bricolageGrotesqu = 'BricolageGrotesque';
+
+  static String getFontFamilyByLocale(Locale locale) {
+    // TODO(author): Add a new case for a new language code
+    switch (locale.languageCode) {
+      case 'en':
+        return bricolageGrotesqu;
+      default:
+        return bricolageGrotesqu;
+    }
+  }
+}

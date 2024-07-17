@@ -18,6 +18,9 @@ enum FlutterProjectType implements CliEnum {
   /// manage the platform code.
   app,
 
+  /// A multi-package project template.
+  forge,
+
   /// A List/Detail app template that follows community best practices.
   skeleton,
 
@@ -44,6 +47,7 @@ enum FlutterProjectType implements CliEnum {
   @override
   String get helpText => switch (this) {
         FlutterProjectType.app => '(default) Generate a Flutter application.',
+        FlutterProjectType.forge => 'Generate a multi-package Flutter project.',
         FlutterProjectType.skeleton =>
           'Generate a List View / Detail View Flutter application that follows community best practices.',
         FlutterProjectType.package =>
@@ -111,12 +115,16 @@ class FlutterProjectMetadata {
       // Create a default empty metadata.
       return;
     }
+
     Object? yamlRoot;
     try {
       yamlRoot = loadYaml(file.readAsStringSync());
+      _logger.printTrace('Yaml root: $yamlRoot');
     } on YamlException {
       // Handled in _validate below.
+      _logger.printTrace('.metadata file at ${file.path} was empty or malformed.');
     }
+
     if (yamlRoot is! YamlMap) {
       _logger.printTrace('.metadata file at ${file.path} was empty or malformed.');
       return;
@@ -132,6 +140,8 @@ class FlutterProjectMetadata {
       }
     }
     if (_validateMetadataMap(yamlRoot, <String, Type>{'project_type': String}, _logger)) {
+      _logger.printStatus('Yaml root: $yamlRoot');
+      _logger.printStatus('Found project_type in .metadata');
       _projectType = FlutterProjectType.fromCliName(yamlRoot['project_type'] as String);
     }
     final Object? migrationYaml = yamlRoot['migration'];
@@ -185,6 +195,7 @@ class FlutterProjectMetadata {
 
   @override
   String toString() {
+    _logger.printStatus('Writing metadata file with project type: $projectType');
     return '''
 # This file tracks properties of this Flutter project.
 # Used by Flutter tool to assess capabilities and perform upgrades etc.
@@ -195,7 +206,7 @@ version:
   revision: ${escapeYamlString(_versionRevision ?? '')}
   channel: ${escapeYamlString(_versionChannel ?? kUserBranch)}
 
-project_type: ${projectType == null ? '' : projectType!.cliName}
+  project_type: ${projectType == null ? '' : projectType!.cliName}
 ${migrateConfig.getOutputFileString()}''';
   }
 

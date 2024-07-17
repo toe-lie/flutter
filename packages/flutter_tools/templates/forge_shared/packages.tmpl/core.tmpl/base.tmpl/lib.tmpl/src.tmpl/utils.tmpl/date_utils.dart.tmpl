@@ -1,0 +1,25 @@
+class DateUtils {
+  static bool isSameDay(DateTime dateA, DateTime dateB) {
+    return dateOnly(dateA) == dateOnly(dateB);
+  }
+
+  static bool isAfterDay(DateTime dateA, DateTime dateB) {
+    return dateOnly(dateA).isAfter(dateOnly(dateB));
+  }
+
+  static bool isBeforeDay(DateTime dateA, DateTime dateB) {
+    return dateOnly(dateA).isBefore(dateOnly(dateB));
+  }
+
+  static DateTime dateOnly(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+
+  static bool isSameOrAfterDay(DateTime date1, DateTime date2) {
+    return isSameDay(date1, date2) || isAfterDay(date1, date2);
+  }
+
+  static bool isSameOrBeforeDay(DateTime date1, DateTime date2) {
+    return isSameDay(date1, date2) || isBeforeDay(date1, date2);
+  }
+}

@@ -1,0 +1,19 @@
+extension StringExtension on String? {
+  String orEmpty() => this ?? '';
+  String orElse(String defaultValue) {
+    if (this != null && this!.isNotEmpty) {
+      return this!;
+    } else {
+      return defaultValue;
+    }
+  }
+
+  double doubleOrZero() => double.tryParse(orEmpty()) ?? 0;
+
+  // TODO: migrate to toIntOrNull
+  int? intOrNull() => int.tryParse(orEmpty());
+
+  int toIntOrThrow() => int.parse(orEmpty());
+
+  int? toIntOrNull() => int.tryParse(orEmpty());
+}
