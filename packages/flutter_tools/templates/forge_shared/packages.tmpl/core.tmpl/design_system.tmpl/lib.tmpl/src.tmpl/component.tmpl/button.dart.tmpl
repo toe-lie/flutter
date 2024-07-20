@@ -1,0 +1,255 @@
+import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
+
+class {{pascalCaseProjectName}}PrimaryButton extends StatelessWidget {
+  const {{pascalCaseProjectName}}PrimaryButton({
+    super.key,
+    required this.label,
+    required this.onPressed,
+    this.enabled = true,
+  });
+
+  final String label;
+  final VoidCallback? onPressed;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return FilledButton(
+      onPressed: enabled ? onPressed : null,
+      child: Text(label),
+    );
+  }
+}
+
+class {{pascalCaseProjectName}}TextButton extends StatelessWidget {
+  const {{pascalCaseProjectName}}TextButton({
+    super.key,
+    this.icon,
+    required this.labelText,
+    required this.onPressed,
+    this.enabled = true,
+  });
+
+  final Widget? icon;
+  final String labelText;
+  final VoidCallback? onPressed;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    if (icon != null) {
+      return TextButton.icon(
+          onPressed: enabled ? onPressed : null,
+          icon: icon!,
+          label: Text(labelText));
+    } else {
+      return TextButton(
+        style: TextButton.styleFrom(
+          disabledForegroundColor: context.colorScheme.textDisabled,
+        ),
+        onPressed: enabled ? onPressed : null,
+        child: Text(labelText),
+      );
+    }
+  }
+}
+
+class {{pascalCaseProjectName}}NegativeTextButton extends StatelessWidget {
+  const {{pascalCaseProjectName}}NegativeTextButton({
+    super.key,
+    required this.labelText,
+    required this.onPressed,
+    this.enabled = true,
+  });
+
+  final String labelText;
+  final VoidCallback? onPressed;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      style: TextButton.styleFrom(
+        disabledForegroundColor: context.colorScheme.textDisabled,
+        foregroundColor: context.colorScheme.textMediumEmphasis,
+      ),
+      onPressed: enabled ? onPressed : null,
+      child: Text(labelText),
+    );
+  }
+}
+
+//
+// class {{pascalCaseProjectName}}OnSurfaceButton extends StatelessWidget {
+//   const {{pascalCaseProjectName}}OnSurfaceButton({
+//     super.key,
+//     required this.label,
+//     required this.onPressed,
+//     this.enabled = true,
+//     this.icon,
+//   });
+//
+//   final String label;
+//   final VoidCallback? onPressed;
+//   final bool enabled;
+//   final Widget? icon;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final colorScheme = Theme.of(context).colorScheme;
+//     if (icon != null) {
+//       return ElevatedButton.icon(
+//         style: ElevatedButton.styleFrom(
+//           disabledForegroundColor: colorScheme.onSurface,
+//           backgroundColor: colorScheme.buttonBackgroundOnSurface,
+//           minimumSize: const Size(Dimen.buttonWidth, Dimen.buttonHeight),
+//           elevation: 0,
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(BorderRadiusSize.normal),
+//           ),
+//         ),
+//         onPressed: onPressed,
+//         icon: icon!,
+//         label: Text(label,
+//             style: context.textTheme.buttonText.copyWith(
+//               color: context.colorScheme.body,
+//             )),
+//       );
+//     } else {
+//       return ElevatedButton(
+//         style: ElevatedButton.styleFrom(
+//           disabledForegroundColor: colorScheme.onSurface,
+//           backgroundColor: colorScheme.buttonBackgroundOnSurface,
+//           minimumSize: const Size(Dimen.buttonWidth, Dimen.buttonHeight),
+//           elevation: 0,
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(BorderRadiusSize.normal),
+//           ),
+//         ),
+//         onPressed: onPressed,
+//         child: Text(label,
+//             style: context.textTheme.buttonText.copyWith(
+//               color: context.colorScheme.body,
+//             )),
+//       );
+//     }
+//   }
+// }
+//
+// class {{pascalCaseProjectName}}OnPrimaryButton extends StatelessWidget {
+//   const {{pascalCaseProjectName}}OnPrimaryButton({
+//     super.key,
+//     required this.label,
+//     required this.onPressed,
+//     this.enabled = true,
+//     this.icon,
+//   });
+//
+//   final String label;
+//   final VoidCallback? onPressed;
+//   final bool enabled;
+//   final Widget? icon;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final colorScheme = Theme.of(context).colorScheme;
+//     if (icon != null) {
+//       return ElevatedButton.icon(
+//         style: ElevatedButton.styleFrom(
+//           disabledForegroundColor: colorScheme.onPrimary,
+//           backgroundColor: colorScheme.buttonBackgroundOnPrimary,
+//           minimumSize: const Size(Dimen.buttonWidth, Dimen.buttonHeight),
+//           elevation: 0,
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(BorderRadiusSize.normal),
+//           ),
+//         ),
+//         onPressed: onPressed,
+//         icon: icon!,
+//         label: Text(label,
+//             style: context.textTheme.buttonText.copyWith(
+//               color: context.colorScheme.primary,
+//             )),
+//       );
+//     } else {
+//       return ElevatedButton(
+//         style: ElevatedButton.styleFrom(
+//           disabledForegroundColor: colorScheme.primary,
+//           backgroundColor: colorScheme.buttonBackgroundOnPrimary,
+//           minimumSize: const Size(Dimen.buttonWidth, Dimen.buttonHeight),
+//           elevation: 0,
+//           shape: RoundedRectangleBorder(
+//             borderRadius: BorderRadius.circular(BorderRadiusSize.normal),
+//           ),
+//         ),
+//         onPressed: onPressed,
+//         child: Text(label,
+//             style: context.textTheme.buttonText.copyWith(
+//               color: context.colorScheme.primary,
+//             )),
+//       );
+//     }
+//   }
+// }
+//
+class {{pascalCaseProjectName}}OutlinedButton extends StatelessWidget {
+  const {{pascalCaseProjectName}}OutlinedButton({
+    super.key,
+    this.labelText,
+    this.label,
+    this.borderSize,
+    this.borderColor,
+    required this.onPressed,
+    this.icon,
+  });
+
+  final Function()? onPressed;
+  final String? labelText;
+  final Widget? label;
+  final double? borderSize;
+  final Color? borderColor;
+  final Widget? icon;
+
+  @override
+  Widget build(BuildContext context) {
+    if (icon != null) {
+      return OutlinedButton.icon(
+        onPressed: onPressed,
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(Dimen.buttonWidth, Dimen.buttonHeight),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(BorderRadiusSize.normal),
+          ),
+          side: BorderSide(
+            width: borderSize ?? 1,
+            color: borderColor ?? context.colorScheme.outline,
+          ),
+        ),
+        icon: icon!,
+        label: label ??
+            Text(
+              labelText ?? '',
+            ),
+      );
+    } else {
+      return OutlinedButton(
+        onPressed: () => onPressed != null ? onPressed!() : null,
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(Dimen.buttonWidth, Dimen.buttonHeight),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(BorderRadiusSize.normal),
+          ),
+          side: BorderSide(
+            width: borderSize ?? 1,
+            color: borderColor ?? context.colorScheme.outline,
+          ),
+        ),
+        child: label ??
+            Text(
+              labelText ?? '',
+            ),
+      );
+    }
+  }
+}

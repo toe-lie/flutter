@@ -1,0 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
+import 'package:ui/src/form/form_field_validation_error.dart';
+
+extension FormFieldValidationErrorX on FormFieldValidationError {
+  String resolveErrorMessage(BuildContext context) {
+    switch (this) {
+      case FormFieldValidationErrorEmpty():
+        return context.l10n.errorFormFieldRequired;
+      case FormFieldValidationErrorInvalid():
+        return context.l10n.errorFormFieldInvalid;
+      case FormFieldValidationErrorOther():
+        return message;
+    }
+  }
+}

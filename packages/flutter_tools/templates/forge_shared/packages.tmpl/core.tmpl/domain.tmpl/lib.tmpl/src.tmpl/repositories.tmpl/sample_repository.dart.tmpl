@@ -1,0 +1,9 @@
+import 'package:base/base.dart';
+import 'package:domain/domain.dart';
+
+abstract class SampleRepository {
+  Stream<Result<List<Sample>>> observeSamples();
+  Stream<Result<Sample>> observeSample({
+    required String sampleId,
+  });
+}

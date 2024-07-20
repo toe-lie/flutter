@@ -1,0 +1,45 @@
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui/ui.dart';
+
+import '../bloc/bloc.dart';
+import '../sample_list.dart';
+import 'components/components.dart';
+
+class SampleListScreen extends StatelessWidget {
+  const SampleListScreen({
+    super.key,
+    required this.onSampleListItemEvent,
+  });
+
+  final SampleListItemEventHandler onSampleListItemEvent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Sample List')),
+      body: BlocBuilder<SampleListBloc, SampleListState>(
+        buildWhen: (previous, current) =>
+            previous.sampleListUiState != current.sampleListUiState,
+        builder: (context, state) {
+          return state.sampleListUiState.toView(
+            context,
+            successViewBuilder: (items) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: Grid.one,
+                  vertical: Grid.one,
+                ),
+                child: SampleListView(
+                  items: items,
+                  onSampleListItemEvent: onSampleListItemEvent,
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}

@@ -1,0 +1,17 @@
+import '../entities/entities.dart';
+
+abstract class SampleDao {
+  Stream<List<SampleEntity>> observeEntities();
+
+  Stream<SampleEntity> observeEntity({required String entityId});
+
+  Future<void> upsertEntity(SampleEntity entity);
+
+  Future<void> upsertEntities(List<SampleEntity> entities);
+
+  Future<void> deleteEntitiesByIds(List<String> ids);
+
+  Future<void> deleteEntityById(String id);
+
+  Future<void> deleteAllEntities();
+}

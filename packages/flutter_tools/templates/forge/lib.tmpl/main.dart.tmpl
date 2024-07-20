@@ -1,0 +1,32 @@
+import 'package:flavor/flavor.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import 'service_locator/service_locator.dart';
+import 'app/app.dart';
+
+void main() async {
+  initFlavor();
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await setupServiceLocator();
+
+  runApp(
+    const RootRestorationScope(
+      restorationId: 'root',
+      child: HelloForgeAppEntry(),
+    ),
+  );
+}
+
+void initFlavor() {
+  if (appFlavor == Flavor.dev.name) {
+    FlavorConfig.setupDevFlavor();
+  } else if (appFlavor == Flavor.qa.name) {
+    FlavorConfig.setupQaFlavor();
+  } else if (appFlavor == Flavor.prod.name) {
+    FlavorConfig.setupProdFlavor();
+  } else {
+    throw Exception('Unknown FLUTTER_APP_FLAVOR: $appFlavor');
+  }
+}

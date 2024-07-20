@@ -1,0 +1,61 @@
+import 'package:database/database.dart';
+import 'package:domain/domain.dart';
+import 'package:drift/drift.dart';
+
+import '../drift_{{concatenatedCaseProjectName}}_database.dart';
+import '../mappers/mappers.dart';
+import '../tables/tables.dart';
+import 'drift_sample_dao.drift.dart';
+
+@DriftAccessor(tables: [SampleTable])
+class DriftSampleDao extends DatabaseAccessor<Drift{{pascalCaseProjectName}}Database>
+    with $DriftSampleDaoMixin
+    implements SampleDao {
+  DriftSampleDao(super.db);
+
+  @override
+  Future<void> deleteAllEntities() async {
+    await db.managers.sampleTable.delete();
+  }
+
+  @override
+  Future<void> deleteEntitiesByIds(List<String> ids) async {
+    await db.managers.sampleTable.filter((tbl) => tbl.id.isIn(ids)).delete();
+  }
+
+  @override
+  Future<void> deleteEntityById(String id) async {
+    await db.managers.sampleTable.filter((tbl) => tbl.id.equals(id)).delete();
+  }
+
+  @override
+  Stream<List<SampleEntity>> observeEntities() {
+    return db.managers.sampleTable
+        .watch()
+        .map((rows) => rows.map((row) => row.toEntity()).toList());
+  }
+
+  @override
+  Stream<SampleEntity> observeEntity({required String entityId}) {
+    return db.managers.sampleTable
+        .filter((tbl) => tbl.id.equals(entityId))
+        .watchSingle()
+        .map((row) => row.toEntity());
+  }
+
+  @override
+  Future<void> upsertEntities(List<SampleEntity> entities) async {
+    await db.managers.sampleTable.bulkCreate(
+      (o) => entities.map((e) => o(id: e.id, name: e.name)).toList(),
+      mode: InsertMode.insertOrReplace,
+    );
+  }
+
+  @override
+  Future<void> upsertEntity(SampleEntity entity) async {
+    await db.managers.sampleTable.create(
+      (o) => o(id: entity.id, name: entity.name),
+      mode: InsertMode.insertOrReplace,
+    );
+  }
+}

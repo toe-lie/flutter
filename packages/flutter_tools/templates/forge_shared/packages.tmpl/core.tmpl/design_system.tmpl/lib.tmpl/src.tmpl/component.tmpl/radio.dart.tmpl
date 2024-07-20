@@ -1,0 +1,66 @@
+import 'package:design_system/src/theme/dimens.dart';
+import 'package:flutter/material.dart';
+
+class {{pascalCaseProjectName}}RadioButton<T> extends StatelessWidget {
+  const {{pascalCaseProjectName}}RadioButton({
+    super.key,
+    required this.titleText,
+    required this.value,
+    required this.groupValue,
+    required this.onChanged,
+    this.controlAffinity = ListTileControlAffinity.leading,
+  });
+  final String titleText;
+  final T value;
+  final T? groupValue;
+  final ValueChanged<T?> onChanged;
+  final ListTileControlAffinity controlAffinity;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return RadioListTile(
+      activeColor: colorScheme.primary,
+      contentPadding: EdgeInsets.zero,
+      title: Text(titleText),
+      value: value,
+      groupValue: groupValue,
+      controlAffinity: controlAffinity,
+      onChanged: (value) => onChanged(value),
+    );
+  }
+}
+
+class {{pascalCaseProjectName}}RadioLegacyButton<T> extends StatelessWidget {
+  const {{pascalCaseProjectName}}RadioLegacyButton({
+    super.key,
+    required this.titleText,
+    required this.value,
+    required this.groupValue,
+    required this.onChanged,
+  });
+  final String titleText;
+  final T value;
+  final T? groupValue;
+  final ValueChanged<T?> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return Container(
+      decoration: BoxDecoration(
+        color: colorScheme.surface,
+        border: Border.all(color: const Color(0xFFD8D8D8)),
+        borderRadius:
+            const BorderRadius.all(Radius.circular(BorderRadiusSize.normal)),
+      ),
+      child: RadioListTile(
+        contentPadding: EdgeInsets.zero,
+        title: Text(titleText),
+        value: value,
+        groupValue: groupValue,
+        onChanged: onChanged,
+      ),
+    );
+  }
+}

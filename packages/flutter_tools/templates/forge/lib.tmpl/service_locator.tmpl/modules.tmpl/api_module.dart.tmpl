@@ -1,0 +1,8 @@
+import 'package:api/api.dart';
+import 'package:base/base.dart';
+
+Future<void> provideApiModule({
+  required {{pascalCaseProjectName}}Api api,
+}) async {
+  getIt.registerSingleton<{{pascalCaseProjectName}}Api>(api);
+}

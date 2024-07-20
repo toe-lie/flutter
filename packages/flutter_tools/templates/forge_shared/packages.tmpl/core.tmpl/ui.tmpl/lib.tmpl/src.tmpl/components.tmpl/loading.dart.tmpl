@@ -1,0 +1,20 @@
+import 'package:assets/gen/assets.gen.dart';
+import 'package:flutter/material.dart';
+
+class {{pascalCaseProjectName}}Loading extends StatelessWidget {
+  const {{pascalCaseProjectName}}Loading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return {{pascalCaseProjectName}}Assets.lottie.loading.lottie(width: 96, height: 96);
+  }
+}
+
+class {{pascalCaseProjectName}}LoadingView extends StatelessWidget {
+  const {{pascalCaseProjectName}}LoadingView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: {{pascalCaseProjectName}}Loading());
+  }
+}

@@ -1,0 +1,46 @@
+import 'dart:async';
+
+import 'package:base/base.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui/ui.dart';
+
+part 'sample_list_event.dart';
+
+part 'sample_list_state.dart';
+
+class SampleListBloc extends Bloc<SampleListEvent, SampleListState> {
+  SampleListBloc({
+    ObserveSamplesUseCase? observeSamplesUseCase,
+  })  : _observeSamplesUseCase = observeSamplesUseCase ?? getIt(),
+        super(SampleListState.create()) {
+    on<SampleListFetched>(
+      _handleSamplesFetched,
+      transformer: restartable(),
+    );
+  }
+
+  final ObserveSamplesUseCase _observeSamplesUseCase;
+
+  FutureOr<void> _handleSamplesFetched(
+        SampleListFetched event,
+    Emitter<SampleListState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        sampleListUiState: const UiStateInProgress(),
+      ),
+    );
+
+    await emit.forEach(
+      _observeSamplesUseCase(const ObserveSamplesUseCaseRequest()),
+      onData: (result) => state.copyWith(
+        sampleListUiState: UiState.fromResult(result),
+      ),
+      onError: (e, s) => state.copyWith(
+        sampleListUiState: UiStateFailure.fromError(e),
+      ),
+    );
+  }
+}

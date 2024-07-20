@@ -381,7 +381,9 @@ abstract class CreateBase extends FlutterCommand {
     required String organization,
     required String projectName,
     required String titleCaseProjectName,
-    required String className,
+    required String camelCaseProjectName,
+    required String pascalCaseProjectName,
+    required String concatenatedCaseProjectName,
     String? projectDescription,
     String? androidLanguage,
     String? iosDevelopmentTeam,
@@ -414,11 +416,11 @@ abstract class CreateBase extends FlutterCommand {
     final String pluginClassLowerCamelCase =
         pluginClass[0].toLowerCase() + pluginClass.substring(1);
     final String appleIdentifier =
-        createUTIIdentifier(organization, projectName);
+        createUTIIdentifier(organization, concatenatedCase(projectName));
     final String androidIdentifier =
-        createAndroidIdentifier(organization, projectName);
+        createAndroidIdentifier(organization, concatenatedCase(projectName));
     final String windowsIdentifier =
-        createWindowsIdentifier(organization, projectName);
+        createWindowsIdentifier(organization, concatenatedCase(projectName));
     // Linux uses the same scheme as the Android identifier.
     // https://developer.gnome.org/gio/stable/GApplication.html#g-application-id-is-valid
     final String linuxIdentifier = androidIdentifier;
@@ -427,7 +429,9 @@ abstract class CreateBase extends FlutterCommand {
       'organization': organization,
       'projectName': projectName,
       'titleCaseProjectName': titleCaseProjectName,
-      'className': className,
+      'camelCaseProjectName': camelCaseProjectName,
+      'pascalCaseProjectName': pascalCaseProjectName,
+      'concatenatedCaseProjectName': concatenatedCaseProjectName,
       'androidIdentifier': androidIdentifier,
       'iosIdentifier': appleIdentifier,
       'macosIdentifier': appleIdentifier,

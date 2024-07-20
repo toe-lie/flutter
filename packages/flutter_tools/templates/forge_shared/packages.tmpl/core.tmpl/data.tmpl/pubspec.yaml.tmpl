@@ -1,0 +1,33 @@
+name: data
+description: A new Flutter package project.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: {{dartSdkVersionBounds}}
+
+dependencies:
+  flutter:
+    sdk: flutter
+  base:
+    path: ../base
+  domain:
+    path: ../domain
+  api:
+    path: ../api
+  database:
+    path: ../database
+  preferences:
+    path: ../preferences
+  uuid: ^3.0.7
+  connectivity_plus: ^5.0.2
+  internet_connection_checker: ^1.0.0+1
+  jwt_decoder: ^2.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.2
+  test: ^1.24.1
+  mocktail: ^0.3.0
+  hive_generator: ^2.0.0

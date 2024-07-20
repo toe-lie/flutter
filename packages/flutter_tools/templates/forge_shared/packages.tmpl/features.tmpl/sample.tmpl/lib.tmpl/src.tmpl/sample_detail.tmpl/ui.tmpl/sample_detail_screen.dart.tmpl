@@ -1,0 +1,39 @@
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui/ui.dart';
+
+import '../bloc/bloc.dart';
+import 'components/components.dart';
+
+class SampleDetailScreen extends StatelessWidget {
+  const SampleDetailScreen({
+    super.key,
+    required this.sampleId,
+  });
+
+  final String sampleId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Sample Detail'),
+      ),
+      body: BlocBuilder<SampleDetailBloc, SampleDetailState>(
+        buildWhen: (previous, current) =>
+        previous.sampleUiState != current.sampleUiState,
+        builder: (context, state) {
+          return state.sampleUiState.toView(
+            context,
+            successViewBuilder: (item) {
+              return Center(
+                child: Text(item.name),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}

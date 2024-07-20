@@ -1,0 +1,8 @@
+import 'api_exception.dart';
+
+class ClientApiException extends ApiException {
+  const ClientApiException(String message, {required this.errors})
+      : super(message);
+
+  final Map<String, List<String>>? errors;
+}

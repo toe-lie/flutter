@@ -1,0 +1,25 @@
+import 'package:base/base.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:ui/ui.dart';
+
+import 'components.dart';
+
+class SampleListItemView extends StatelessWidget {
+  const SampleListItemView({
+    super.key,
+    required this.item,
+    required this.onTap,
+  });
+
+  final Sample item;
+  final Function(Sample) onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text(item.name),
+      onTap: () => onTap(item),
+    );
+  }
+}

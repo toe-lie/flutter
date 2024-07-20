@@ -1,0 +1,16 @@
+part of 'sample_detail_bloc.dart';
+
+sealed class SampleDetailEvent extends Equatable {
+  const SampleDetailEvent();
+}
+
+class SampleDetailFetched extends SampleDetailEvent {
+  const SampleDetailFetched(
+    this.sampleId,
+  );
+
+  final String sampleId;
+
+  @override
+  List<Object> get props => [sampleId];
+}

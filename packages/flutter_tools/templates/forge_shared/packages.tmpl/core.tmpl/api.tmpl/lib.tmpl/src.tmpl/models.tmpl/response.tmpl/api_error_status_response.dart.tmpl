@@ -1,0 +1,19 @@
+import 'package:api/api.dart';
+import 'package:base/base.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'api_error_status_response.g.dart';
+
+@JsonSerializable(createToJson: false)
+class ApiErrorStatusResponse extends Equatable {
+  @JsonKey(name: 'error')
+  final ApiStatusResponse status;
+
+  const ApiErrorStatusResponse(this.status);
+
+  factory ApiErrorStatusResponse.fromJson(Map<String, dynamic> json) =>
+      _$ApiErrorStatusResponseFromJson(json);
+
+  @override
+  List<Object> get props => [status];
+}

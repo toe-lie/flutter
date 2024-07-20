@@ -1,0 +1,35 @@
+part of 'sample_detail_bloc.dart';
+
+final class SampleDetailState extends Equatable {
+  const SampleDetailState({
+    required this.sampleId,
+    this.sampleUiState = const UiStateInitial(),
+  });
+
+  final String sampleId;
+  final UiState<Sample> sampleUiState;
+
+  factory SampleDetailState.create({
+    required String sampleId,
+  }) {
+    return SampleDetailState(
+      sampleId: sampleId,
+    );
+  }
+
+  @override
+  List<Object> get props => [
+        sampleId,
+        sampleUiState,
+      ];
+
+  SampleDetailState copyWith({
+    String? sampleId,
+    UiState<Sample>? sampleUiState,
+  }) {
+    return SampleDetailState(
+      sampleId: sampleId ?? this.sampleId,
+      sampleUiState: sampleUiState ?? this.sampleUiState,
+    );
+  }
+}

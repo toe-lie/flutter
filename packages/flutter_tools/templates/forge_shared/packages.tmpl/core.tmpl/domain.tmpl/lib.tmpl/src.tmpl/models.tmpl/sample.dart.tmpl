@@ -1,0 +1,17 @@
+import 'package:base/base.dart';
+
+class Sample extends Equatable {
+  const Sample({
+    required this.id,
+    required this.name,
+  });
+
+  final String id;
+  final String name;
+
+  @override
+  List<Object> get props => [
+        id,
+        name,
+      ];
+}

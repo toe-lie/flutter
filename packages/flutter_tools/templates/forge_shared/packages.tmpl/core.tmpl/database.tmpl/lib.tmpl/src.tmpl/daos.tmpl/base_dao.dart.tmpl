@@ -1,0 +1,37 @@
+abstract class BaseDao<T> {
+  /// Insert an object in the database.
+  ///
+  /// @param obj the object to be inserted.
+  Future<String> insertEntity(T entity);
+
+  /// Insert an array of objects in the database.
+  ///
+  /// @param obj the objects to be inserted.
+  Future<void> insertEntities(List<T> entities);
+
+  /// Get an object from the database
+  ///
+  /// @param id the id of the object to be retrieved
+  Future<T?> getEntity(String id);
+
+  /// Observe an object from the database
+  ///
+  /// @param id the id of the object to be retrieved
+  Stream<T?> observeEntity(String id);
+
+  /// Get all objects from the database
+  Future<List<T>> getEntities();
+
+  /// Observe all objects from the database
+  Stream<List<T>> observeEntities();
+
+  /// Update an object from the database.
+  ///
+  /// @param obj the object to be updated
+  Future<void> updateEntity(T entity);
+
+  /// Delete an object from the database
+  ///
+  /// @param obj the object to be deleted
+  Future<void> deleteEntity(T entity);
+}

@@ -1,0 +1,41 @@
+part of '../app_navigation.dart';
+
+@TypedGoRoute<SampleListRoute>(
+  path: ScreenPaths.samples,
+  routes: <TypedGoRoute<GoRouteData>>[
+    TypedGoRoute<SampleDetailRoute>(path: ':id')
+  ],
+)
+class SampleListRoute extends GoRouteData {
+  const SampleListRoute();
+
+  void _navigateToSampleDetail(BuildContext context, String id) {
+    SampleDetailRoute(
+      id: id,
+    ).push(context);
+  }
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return SampleListScreenEntry(
+      onSampleListItemEvent: (item) {
+        _navigateToSampleDetail(context, item.id);
+      },
+    );
+  }
+}
+
+class SampleDetailRoute extends GoRouteData {
+  const SampleDetailRoute({
+    required this.id,
+  });
+
+  final String id;
+
+  @override
+  Widget build(BuildContext context, GoRouterState state) {
+    return SampleDetailScreenEntry(
+      sampleId: id.toString(),
+    );
+  }
+}

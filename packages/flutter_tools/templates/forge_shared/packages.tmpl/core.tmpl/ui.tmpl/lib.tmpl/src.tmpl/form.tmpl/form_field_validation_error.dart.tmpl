@@ -1,0 +1,31 @@
+import 'package:equatable/equatable.dart';
+
+sealed class FormFieldValidationError extends Equatable {
+  const FormFieldValidationError(this.message);
+
+  final String message;
+
+  @override
+  List<Object?> get props => [message];
+}
+
+final class FormFieldValidationErrorEmpty extends FormFieldValidationError {
+  const FormFieldValidationErrorEmpty([super.message = '']);
+}
+
+final class FormFieldValidationErrorInvalid extends FormFieldValidationError {
+  const FormFieldValidationErrorInvalid([super.message = '']);
+}
+
+final class FormFieldValidationErrorOther extends FormFieldValidationError {
+  const FormFieldValidationErrorOther([super.message = '']);
+}
+
+
+extension StringToFomFieldValidationError on String? {
+  FormFieldValidationError? toFormValidationErrorOrNull() {
+    if (this == null || this?.isEmpty == true) return null;
+
+    return FormFieldValidationErrorOther(this ?? '');
+  }
+}

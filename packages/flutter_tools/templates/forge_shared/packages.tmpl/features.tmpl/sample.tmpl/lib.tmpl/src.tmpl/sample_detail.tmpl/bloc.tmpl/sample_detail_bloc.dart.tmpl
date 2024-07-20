@@ -1,0 +1,49 @@
+import 'dart:async';
+
+import 'package:base/base.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui/ui.dart';
+
+part 'sample_detail_event.dart';
+
+part 'sample_detail_state.dart';
+
+class SampleDetailBloc extends Bloc<SampleDetailEvent, SampleDetailState> {
+  SampleDetailBloc({
+    required String sampleId,
+    ObserveSampleUseCase? observeSampleUseCase,
+  })  : _observeSampleUseCase = observeSampleUseCase ?? getIt(),
+        super(SampleDetailState(sampleId: sampleId)) {
+    on<SampleDetailFetched>(
+      _handleDetailFetched,
+      transformer: restartable(),
+    );
+  }
+
+  final ObserveSampleUseCase _observeSampleUseCase;
+
+  FutureOr<void> _handleDetailFetched(
+      SampleDetailFetched event,
+    Emitter<SampleDetailState> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        sampleUiState: const UiStateInProgress(),
+      ),
+    );
+
+    await emit.forEach(
+      _observeSampleUseCase(ObserveSampleUseCaseRequest(
+        sampleId: event.sampleId,
+      )),
+      onData: (result) => state.copyWith(
+        sampleUiState: UiState.fromResult(result),
+      ),
+      onError: (e, s) => state.copyWith(
+        sampleUiState: UiStateFailure.fromError(e),
+      ),
+    );
+  }
+}

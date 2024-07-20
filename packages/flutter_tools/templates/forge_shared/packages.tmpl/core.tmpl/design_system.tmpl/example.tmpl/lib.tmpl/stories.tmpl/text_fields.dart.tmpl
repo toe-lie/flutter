@@ -1,0 +1,24 @@
+import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
+import 'package:storybook_flutter/storybook_flutter.dart';
+
+List<Story> getTextFieldStories({{pascalCaseProjectName}}ThemeData theme) {
+  return [
+    Story(
+      name: 'Widgets/TextFields/Outline',
+      description: 'Outline TextField',
+      builder: (BuildContext context) {
+        return {{pascalCaseProjectName}}OutlineTextField(
+          labelText: context.knobs.text(
+            label: 'label',
+            initial: 'Outline TextField Label',
+          ),
+          hintText: context.knobs.text(
+            label: 'hint',
+            initial: 'Input your text here',
+          ),
+        );
+      },
+    ),
+  ];
+}

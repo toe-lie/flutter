@@ -1,0 +1,40 @@
+export 'theme_data.dart';
+export 'colors.dart';
+export 'dimens.dart';
+
+import 'package:design_system/src/theme/theme_data.dart';
+import 'package:flutter/material.dart';
+
+extension ContextExt on BuildContext {
+  ColorScheme get colorScheme => Theme.of(this).colorScheme;
+  TextTheme get textTheme => Theme.of(this).textTheme;
+  {{pascalCaseProjectName}}ThemeData get theme => {{pascalCaseProjectName}}Theme.of(this);
+}
+
+class {{pascalCaseProjectName}}Theme extends InheritedWidget {
+  const {{pascalCaseProjectName}}Theme({
+    required super.child,
+    required this.lightTheme,
+    required this.darkTheme,
+    super.key,
+  });
+
+  final {{pascalCaseProjectName}}ThemeData lightTheme;
+  final {{pascalCaseProjectName}}ThemeData darkTheme;
+
+  @override
+  bool updateShouldNotify(
+    {{pascalCaseProjectName}}Theme oldWidget,
+  ) =>
+      oldWidget.lightTheme != lightTheme || oldWidget.darkTheme != darkTheme;
+
+  static {{pascalCaseProjectName}}ThemeData of(BuildContext context) {
+    final {{pascalCaseProjectName}}Theme? inheritedTheme =
+        context.dependOnInheritedWidgetOfExactType<{{pascalCaseProjectName}}Theme>();
+    assert(inheritedTheme != null, 'No {{pascalCaseProjectName}}Theme found in context');
+    final currentBrightness = Theme.of(context).brightness;
+    return currentBrightness == Brightness.dark
+        ? inheritedTheme!.darkTheme
+        : inheritedTheme!.lightTheme;
+  }
+}

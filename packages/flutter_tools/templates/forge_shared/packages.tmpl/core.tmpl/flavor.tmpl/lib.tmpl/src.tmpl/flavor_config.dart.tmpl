@@ -1,0 +1,146 @@
+import 'package:flutter/material.dart';
+
+enum Flavor { dev, qa, prod }
+
+class FlavorValues {
+  const FlavorValues({
+    required this.apiEndpoint,
+  });
+
+  final String apiEndpoint;
+}
+
+class FlavorConfig {
+  final Flavor flavor;
+  final String name;
+  final Color color;
+  final FlavorValues values;
+  static FlavorConfig? _instance;
+
+  static Map<String, dynamic> _config = {};
+
+  static void setFlavor(Flavor flavor) {
+    switch (flavor) {
+      case Flavor.dev:
+        _config = _Config.devConstants;
+        break;
+      case Flavor.qa:
+        _config = _Config.qaConstants;
+        break;
+      case Flavor.prod:
+        _config = _Config.prodConstants;
+        break;
+    }
+
+    FlavorConfig(
+      flavor: flavor,
+      color: FlavorConfig.flavorColor,
+      values: FlavorValues(apiEndpoint: FlavorConfig.baseUrl),
+    );
+  }
+
+  static void setupDevFlavor() {
+    setFlavor(Flavor.dev);
+  }
+
+  static void setupQaFlavor() {
+    setFlavor(Flavor.qa);
+  }
+
+  static void setupProdFlavor() {
+    setFlavor(Flavor.prod);
+  }
+
+  factory FlavorConfig({
+    required Flavor flavor,
+    Color color = Colors.blue,
+    required FlavorValues values,
+  }) {
+    _instance ??= FlavorConfig._internal(
+      flavor,
+      flavor.name,
+      color,
+      values,
+    );
+    return _instance!;
+  }
+
+  FlavorConfig._internal(this.flavor, this.name, this.color, this.values);
+
+  static FlavorConfig get instance {
+    return _instance!;
+  }
+
+  static bool isProduction() => _instance!.flavor == Flavor.prod;
+
+  static bool isDevelopment() => _instance!.flavor == Flavor.dev;
+
+  static bool isQA() => _instance!.flavor == Flavor.qa;
+
+  static String get baseUrl {
+    return _config[_Config.baseUrl];
+  }
+
+  static String get apiBaseUrl {
+    return _config[_Config.apiBaseUrl];
+  }
+
+  static String get imageUploadUrl {
+    return _config[_Config.imageUploadUrl];
+  }
+
+  static get whereAmI {
+    return _config[_Config.whereAmI];
+  }
+
+  static get flavorColor {
+    return _config[_Config.color];
+  }
+
+  static get useProxyServer {
+    return _config[_Config.userProxyServer];
+  }
+}
+
+class _Config {
+  static const baseUrl = "BASE_URL";
+  static const apiBaseUrl = "API_BASE_URL";
+  static const imageUploadUrl = "IMAGE_UPLOAD_URL";
+  static const whereAmI = "WHERE_AM_I";
+  static const color = "COLOR";
+  static const userProxyServer = "USER_PROXY_SERVER";
+
+  static const _mockBaseUrl = "http://192.168.0.1:3002/";
+  static const _devBaseUrl = 'https://dev.api.example.com/';
+  static const _stagingBaseUrl = 'https://staging.api.example.com/';
+  static const _productionBaseUrl = 'https://staging.api.example.com/';
+  static const _apiBasePath = "api/v1/";
+  static const _imageUploadPath = "image-upload/";
+
+  static Map<String, dynamic> devConstants = {
+    baseUrl: _devBaseUrl,
+    apiBaseUrl: _devBaseUrl + _apiBasePath,
+    imageUploadUrl: _devBaseUrl + _imageUploadPath,
+    whereAmI: "dev",
+    color: Colors.red,
+    userProxyServer: false,
+  };
+
+  static Map<String, dynamic> qaConstants = {
+    baseUrl: _stagingBaseUrl,
+    apiBaseUrl: _stagingBaseUrl + _apiBasePath,
+    imageUploadUrl: _stagingBaseUrl + _imageUploadPath,
+    whereAmI: "qa",
+    color: Colors.yellow,
+    userProxyServer: false,
+  };
+
+  static Map<String, dynamic> prodConstants = {
+    baseUrl: _productionBaseUrl,
+    apiBaseUrl: _productionBaseUrl + _apiBasePath,
+    imageUploadUrl: _productionBaseUrl + _imageUploadPath,
+    whereAmI: "prod",
+    color: Colors.greenAccent,
+    userProxyServer: false,
+  };
+}

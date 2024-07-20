@@ -1,0 +1,11 @@
+import 'package:database/database.dart';
+import '../tables/entries.dart';
+
+extension SampleEntryToEntity on SampleEntry {
+  SampleEntity toEntity() {
+    return SampleEntity(
+      id: id,
+      name: name,
+    );
+  }
+}

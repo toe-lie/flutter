@@ -1,0 +1,11 @@
+import 'package:base/base.dart';
+import 'package:domain/domain.dart';
+
+Future<void> provideDomainModule() async {
+  getIt.registerFactory<ObserveSamplesUseCase>(
+    () => ObserveSamplesUseCase(),
+  );
+  getIt.registerFactory<ObserveSampleUseCase>(
+        () => ObserveSampleUseCase(),
+  );
+}

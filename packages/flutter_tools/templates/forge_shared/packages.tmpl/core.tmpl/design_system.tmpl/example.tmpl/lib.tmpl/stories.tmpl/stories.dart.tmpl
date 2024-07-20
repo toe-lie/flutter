@@ -1,0 +1,16 @@
+import 'package:design_system/design_system.dart';
+import 'package:storybook_flutter/storybook_flutter.dart';
+
+import 'buttons.dart';
+import 'text_fields.dart';
+import 'image_inputs.dart';
+import 'phone_fields.dart';
+
+List<Story> getStories({{pascalCaseProjectName}}ThemeData theme) {
+  return [
+    ...getButtonStories(theme),
+    ...getTextFieldStories(theme),
+    ...getImageInputStories(theme),
+    ...getPhoneFieldStories(theme),
+  ];
+}

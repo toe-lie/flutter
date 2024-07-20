@@ -1,0 +1,75 @@
+import 'package:base/base.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sample/sample.dart';
+import '../app/bloc/app_bloc.dart';
+import 'go_router_refresh_stream.dart';
+
+part 'app_navigation.g.dart';
+
+part 'routes/sample_route.dart';
+
+class ScreenPaths {
+  static const login = '/login';
+  static const home = '/home';
+  static const samples = '/samples';
+}
+
+enum Screen {
+  login._('/login'),
+  home._('/home'),
+  samples._(ScreenPaths.samples);
+
+  final String path;
+
+  const Screen._(this.path);
+}
+
+final GlobalKey<NavigatorState> rootNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'root');
+final GlobalKey<NavigatorState> shellNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'shell');
+
+class AppNavigation {
+  AppNavigation({
+    required this.appStateStream,
+  });
+
+  final Stream<AppState> appStateStream;
+
+  Screen? _redirectTo({
+    required String currentLocation,
+    required bool loggedIn,
+    required Screen homeScreen,
+  }) {
+    if (!loggedIn) {
+      return Screen.login;
+    }
+
+    return null;
+  }
+
+  late GoRouter router = GoRouter(
+    routes: $appRoutes,
+    initialLocation: Screen.samples.path,
+    navigatorKey: rootNavigatorKey,
+    debugLogDiagnostics: true,
+    redirect: (context, state) {
+      final currentLocation = state.matchedLocation;
+      final redirectedLoc = _redirectTo(
+        currentLocation: currentLocation,
+        loggedIn: context.read<AppBloc>().state.isLoggedIn,
+        homeScreen: Screen.home,
+      )?.path;
+      return redirectedLoc;
+    },
+    refreshListenable: GoRouterRefreshStream(appStateStream),
+  );
+}
+
+class RedirectManager {
+  RedirectManager();
+
+// get screen for redirect
+}

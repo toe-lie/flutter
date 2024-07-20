@@ -1,0 +1,109 @@
+import 'dart:io';
+
+import 'package:base/base.dart';
+import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
+import 'package:preferences/preferences.dart';
+
+import '../interceptors/interceptors.dart';
+import '{{projectName}}_rest_client.dart';
+
+class RetrofitClientBuilder {
+  static const _apiKeyEnvKey = 'API_KEY';
+
+  RetrofitClientBuilder({
+    required this.apiBaseUrl,
+    required this.interceptors,
+    required this.useProxyServer,
+    required this.preferencesDataSource,
+  });
+
+  final String apiBaseUrl;
+  final List<Interceptor> interceptors;
+  final bool useProxyServer;
+  {{pascalCaseProjectName}}RestClient? _{{camelCaseProjectName}}RestClient;
+  final PreferencesDataSource preferencesDataSource;
+
+  final _dioBaseOptions = BaseOptions(
+    connectTimeout: const Duration(seconds: 10),
+    receiveTimeout: const Duration(seconds: 60),
+    sendTimeout: const Duration(seconds: 30),
+  );
+
+  final String apiKey = const String.fromEnvironment(_apiKeyEnvKey);
+
+  {{pascalCaseProjectName}}RestClient get {{camelCaseProjectName}}RestClient {
+    if (_{{camelCaseProjectName}}RestClient == null) {
+      final {{camelCaseProjectName}}Dio = Dio(
+        _dioBaseOptions.withHeader(
+          {
+            'x_api_key': apiKey,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      final refreshDio = Dio(
+        _dioBaseOptions.copyWith(
+          baseUrl: apiBaseUrl,
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+          sendTimeout: const Duration(seconds: 30),
+        )
+      );
+
+      refreshDio.interceptors.addAll(List.from(interceptors));
+      {{camelCaseProjectName}}Dio.interceptors.add(AuthInterceptor(
+        dio: {{camelCaseProjectName}}Dio,
+        refreshDio: refreshDio,
+        preferencesDataSource: preferencesDataSource,
+      ));
+      {{camelCaseProjectName}}Dio.interceptors.add(AcceptLanguageInterceptor(
+        preferencesDataSource: preferencesDataSource,
+      ));
+      {{camelCaseProjectName}}Dio.interceptors.addAll(List.from(interceptors));
+
+      if (useProxyServer) {
+        {{camelCaseProjectName}}Dio.useProxyServer();
+      }
+
+      _{{camelCaseProjectName}}RestClient = {{pascalCaseProjectName}}RestClient(
+        {{camelCaseProjectName}}Dio,
+        baseUrl: apiBaseUrl,
+      );
+    }
+    return _{{camelCaseProjectName}}RestClient!;
+  }
+}
+
+extension on BaseOptions {
+  BaseOptions withHeader(
+    Map<String, dynamic>? headers,
+  ) {
+    return BaseOptions(
+      connectTimeout: connectTimeout,
+      receiveTimeout: receiveTimeout,
+      sendTimeout: sendTimeout,
+      headers: headers ?? this.headers,
+    );
+  }
+}
+
+extension on Dio {
+  void useProxyServer() {
+    httpClientAdapter = IOHttpClientAdapter(createHttpClient: () {
+      final client = HttpClient();
+      client.findProxy = (uri) {
+        logger.d('findProxy: ${uri.host}');
+        return 'PROXY 192.168.1.19:8888;';
+      };
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) {
+        logger.d('badCertificateCallback: $cert, $host, $port');
+        return true;
+      };
+      return client;
+    });
+  }
+}

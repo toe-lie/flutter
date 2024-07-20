@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+
+import 'flavor_config.dart';
+
+class FlavorBanner extends StatelessWidget {
+  FlavorBanner({super.key, required this.child, BannerConfig? bannerConfig})
+      : _bannerConfig = bannerConfig ?? BannerConfig.defaultBanner();
+  final Widget child;
+  final BannerConfig _bannerConfig;
+
+  @override
+  Widget build(BuildContext context) {
+    if (FlavorConfig.isProduction()) return child;
+    return Stack(
+      children: <Widget>[child, _buildBanner(context)],
+    );
+  }
+
+  Widget _buildBanner(BuildContext context) {
+    return SizedBox(
+      width: 50,
+      height: 50,
+      child: CustomPaint(
+        painter: BannerPainter(
+            message: _bannerConfig.bannerName,
+            textDirection: Directionality.of(context),
+            layoutDirection: Directionality.of(context),
+            location: BannerLocation.topStart,
+            color: _bannerConfig.bannerColor),
+      ),
+    );
+  }
+}
+
+class BannerConfig {
+  final String bannerName;
+  final Color bannerColor;
+
+  BannerConfig({required this.bannerName, required this.bannerColor});
+
+  factory BannerConfig.defaultBanner() {
+    return BannerConfig(
+        bannerName: FlavorConfig.instance.name,
+        bannerColor: FlavorConfig.instance.color);
+  }
+}

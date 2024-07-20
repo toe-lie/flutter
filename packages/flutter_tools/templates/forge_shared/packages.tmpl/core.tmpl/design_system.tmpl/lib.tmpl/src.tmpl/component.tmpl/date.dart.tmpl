@@ -1,0 +1,133 @@
+import 'package:flutter/material.dart';
+
+import '../../design_system.dart';
+
+const minUserAge = 13;
+const maxUserAge = 100;
+const targetUserAge = 35;
+
+class {{pascalCaseProjectName}}OutlineDateField extends StatefulWidget {
+  const {{pascalCaseProjectName}}OutlineDateField({
+    super.key,
+    required this.controller,
+    required this.focusNode,
+    required this.onDateSelected,
+    required this.onFieldSubmitted,
+    required this.restorationId,
+    required this.labelText,
+    required this.errorText,
+    required this.textInputAction,
+    required this.value,
+    this.inverseTheme = false,
+    required this.initialDate,
+    required this.firstDate,
+    required this.lastDate,
+  });
+
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final Function(DateTime) onDateSelected;
+  final Function() onFieldSubmitted;
+  final String? restorationId;
+  final String? labelText;
+  final String? errorText;
+  final TextInputAction? textInputAction;
+  final DateTime initialDate;
+  final DateTime firstDate;
+  final DateTime lastDate;
+  final DateTime? value;
+  final bool inverseTheme;
+
+  @override
+  State<{{pascalCaseProjectName}}OutlineDateField> createState() =>
+      _{{pascalCaseProjectName}}OutlineDateFieldState();
+}
+
+class _{{pascalCaseProjectName}}OutlineDateFieldState extends State<{{pascalCaseProjectName}}OutlineDateField>
+    with RestorationMixin {
+
+  @override
+  String? get restorationId => widget.restorationId;
+
+  late RestorableDateTime _selectedDate;
+  late final RestorableRouteFuture<DateTime?> _restorableDatePickerRouteFuture =
+      RestorableRouteFuture<DateTime?>(
+    onComplete: _selectDate,
+    onPresent: (NavigatorState navigator, Object? arguments) {
+      return navigator.restorablePush(
+        _datePickerRoute,
+        arguments: {
+          'selected_date': _selectedDate.value.millisecondsSinceEpoch,
+          'first_date': widget.firstDate.millisecondsSinceEpoch,
+          'last_date': widget.lastDate.millisecondsSinceEpoch,
+        },
+      );
+    },
+  );
+
+  @override
+  void initState() {
+    _selectedDate = RestorableDateTime(widget.initialDate);
+    super.initState();
+  }
+
+  void _selectDate(DateTime? newSelectedDate) {
+    if (newSelectedDate != null) {
+      setState(() {
+        _selectedDate.value = newSelectedDate;
+        widget.onDateSelected(newSelectedDate);
+      });
+    }
+  }
+
+  @pragma('vm:entry-point')
+  static Route<DateTime> _datePickerRoute(
+    BuildContext context,
+    Object? arguments,
+  ) {
+    return DialogRoute<DateTime>(
+      context: context,
+      builder: (BuildContext context) {
+        final argMap = arguments as Map<String, Object?>;
+        return DatePickerDialog(
+          restorationId: 'date_picker_dialog',
+          initialEntryMode: DatePickerEntryMode.calendarOnly,
+          initialDate: DateTime.fromMillisecondsSinceEpoch(argMap['selected_date'] as int),
+          firstDate: DateTime.fromMillisecondsSinceEpoch(argMap['first_date'] as int),
+          lastDate: DateTime.fromMillisecondsSinceEpoch(argMap['last_date'] as int),
+        );
+      },
+    );
+  }
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    registerForRestoration(_selectedDate, 'selected_date');
+    registerForRestoration(
+      _restorableDatePickerRouteFuture,
+      'date_picker_route_future',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return {{pascalCaseProjectName}}OutlineTextField(
+      initialValue: widget.value?.asUserFriendlyString(context) ?? '',
+      controller: widget.controller,
+      inverseTheme: widget.inverseTheme,
+      labelText: widget.labelText,
+      suffixIcon: Icon(
+        Icons.calendar_today,
+        color: context.colorScheme.iconDisabled,
+      ),
+      textInputAction: widget.textInputAction,
+      onSubmitted: (_) => widget.onFieldSubmitted(),
+      focusNode: widget.focusNode,
+      readOnly: true,
+      onTap: () {
+        _restorableDatePickerRouteFuture.present();
+      },
+      errorText: widget.errorText,
+    );
+  }
+}

@@ -1,0 +1,78 @@
+import 'package:domain/domain.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:preferences/preferences.dart';
+
+import 'models/models.dart';
+
+class HiveBoxKey {
+  const HiveBoxKey._();
+
+  static const userDataBoxKey = 'userData';
+
+  static const sampleKey = 'sample';
+}
+
+class HivePreferencesDataSource extends PreferencesDataSource {
+  HivePreferencesDataSource._({
+    required this.hive,
+  }) {
+    try {
+      hive
+        ..registerAdapter(SamplePreferenceAdapter());
+    } catch (_) {
+      throw Exception(
+          'We shouldn\'t have more than one [HivePreferencesDataSource] instance in the '
+          'project');
+    }
+  }
+
+  final HiveInterface hive;
+
+  static Future<HivePreferencesDataSource> create({
+    required Future<void> Function(HiveInterface) init,
+  }) async {
+    final hive = Hive;
+    await init(hive);
+    final dataSource = HivePreferencesDataSource._(
+      hive: hive,
+    );
+    return dataSource;
+  }
+
+  @override
+  Future<Sample?> getSample() async {
+    final userDataBox = await _openHiveBox(HiveBoxKey.userDataBoxKey);
+    final SamplePreference? samplePreference =
+        userDataBox.get(HiveBoxKey.sampleKey);
+    return samplePreference?.toDomainModel();
+  }
+
+  @override
+  Stream<Sample?> observeSample() async* {
+    yield await getSample();
+
+    final userDataBox = await _openHiveBox(HiveBoxKey.userDataBoxKey);
+    final companyStream = userDataBox.watch(key: HiveBoxKey.sampleKey).map(
+      (event) {
+        final value = event.value as SamplePreference?;
+        return value?.toDomainModel();
+      },
+    );
+    yield* companyStream;
+  }
+
+  @override
+  Future<void> putSample(Sample sample) async {
+    final userDataBox = await _openHiveBox(HiveBoxKey.userDataBoxKey);
+    await userDataBox.put(
+        HiveBoxKey.sampleKey, SamplePreference.fromDomainModel(sample));
+  }
+
+  Future<Box<T>> _openHiveBox<T>(String boxKey) async {
+    return hive.openBox(boxKey);
+  }
+
+  void clearAll() {
+    hive.deleteFromDisk();
+  }
+}

@@ -1,0 +1,23 @@
+import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
+
+import 'component_storybook.dart';
+
+class DesignSystemApp extends StatelessWidget {
+  DesignSystemApp({super.key});
+
+  final _lightTheme = Light{{pascalCaseProjectName}}ThemeData(locale: const Locale('en'));
+  final _darkTheme = Dark{{pascalCaseProjectName}}ThemeData(locale: const Locale('en'));
+
+  @override
+  Widget build(BuildContext context) {
+    return {{pascalCaseProjectName}}Theme(
+      lightTheme: _lightTheme,
+      darkTheme: _darkTheme,
+      child: ComponentStorybook(
+        lightThemeData: _lightTheme,
+        darkThemeData: _darkTheme,
+      ),
+    );
+  }
+}

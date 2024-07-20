@@ -1,0 +1,58 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:api/api.dart';
+import 'package:base/base.dart';
+import 'package:dio/dio.dart';
+import 'package:preferences/preferences.dart';
+
+import '../api_call.dart';
+
+import 'retrofit_client_builder.dart';
+import 'helloforge2_rest_client.dart';
+
+const clientIdEnvKey = 'CLIENT_ID';
+const clientSecretEnvKey = 'CLIENT_SECRET';
+
+class Retrofit{{pascalCaseProjectName}}Api extends {{pascalCaseProjectName}}Api {
+  {{pascalCaseProjectName}}Api({
+    required String baseUrl,
+    required String apiBaseUrl,
+    required String imageUploadUrl,
+    required PreferencesDataSource preferencesDataSource,
+    {{pascalCaseProjectName}}RestClient? helloForge_2RestClient,
+    List<Interceptor> interceptors = const [],
+    Interceptor? companyHostInterceptor,
+    bool useProxyServer = false,
+  }) {
+    final clientBuilder = RetrofitClientBuilder(
+      apiBaseUrl: apiBaseUrl,
+      interceptors: interceptors,
+      useProxyServer: useProxyServer,
+      preferencesDataSource: preferencesDataSource,
+    );
+
+    _{{camelCaseProjectName}}RestClient =
+        {{camelCaseProjectName}}RestClient ?? clientBuilder.{{camelCaseProjectName}}RestClient;
+  }
+
+  late {{pascalCaseProjectName}}RestClient _{{camelCaseProjectName}}RestClient;
+
+  @override
+  Future<List<SampleRM>> getSamples() async {
+    final response = await apiCall<ApiDataResponse<List<SampleRM>>>(
+      () => _helloForge_2RestClient.getSamples(),
+    );
+    return response.data;
+  }
+
+  @override
+  Future<SampleRM> getSample({
+    required String id,
+  }) async {
+    final response = await apiCall<ApiDataResponse<SampleRM>>(
+      () => _helloForge_2RestClient.getSample(id: id),
+    );
+    return response.data;
+  }
+}

@@ -332,12 +332,15 @@ class CreateCommand extends CreateBase {
 
     // The dart project_name is in snake_case, this variable is the Title Case of the Project Name.
     final String titleCaseProjectName = snakeCaseToTitleCase(projectName);
+    final String camelCaseProjectName = camelCase(projectName);
 
     final Map<String, Object?> templateContext = createTemplateContext(
       organization: organization,
       projectName: projectName,
       titleCaseProjectName: titleCaseProjectName,
-      className: '',
+      pascalCaseProjectName: '',
+      camelCaseProjectName: camelCaseProjectName,
+      concatenatedCaseProjectName: '',
       projectDescription: stringArg('description'),
       flutterRoot: flutterRoot,
       withPlatformChannelPluginHook: generateMethodChannelsPlugin,

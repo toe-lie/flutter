@@ -1,0 +1,29 @@
+name: database
+description: A starting point for Dart libraries or applications.
+version: 0.0.1
+publish_to: none
+
+environment:
+  sdk: {{dartSdkVersionBounds}}
+
+scripts:
+  build_runner_build: dart run build_runner build --delete-conflicting-outputs
+  build_runner_watch: dart run build_runner watch --delete-conflicting-outputs
+
+dependencies:
+  base:
+    path: ../../core/base
+  domain:
+    path: ../../core/domain
+  preferences:
+    path: ../../core/preferences
+  json_annotation: ^4.8.1
+  intl: ^0.19.0
+  collection: ^1.17.1
+
+dev_dependencies:
+  build_runner: ^2.4.8
+  json_serializable: ^6.7.0
+  lints: ^2.0.0
+  mocktail: ^0.3.0
+  test: ^1.21.0

@@ -1,0 +1,55 @@
+import 'package:api/api.dart';
+import 'package:base/base.dart';
+import 'package:data/data.dart';
+import 'package:data/src/mappers/mappers.dart';
+import 'package:domain/domain.dart';
+import 'package:database/database.dart';
+
+import '../utils/network_bound_result.dart';
+
+class DefaultSampleRepository extends SampleRepository {
+  DefaultSampleRepository({
+    {{pascalCaseProjectName}}Api? api,
+    SampleDao? sampleDao,
+  })  : _api = api ?? getIt(),
+        _sampleDao = sampleDao ?? getIt();
+
+  final {{pascalCaseProjectName}}Api _api;
+  final SampleDao _sampleDao;
+
+  @override
+  Stream<Result<List<Sample>>> observeSamples() {
+    return NetworkBoundResult<List<Sample>, List<SampleRM>>(
+      createCall: () => remoteDataSourceCall(() => _api.getSamples()),
+      saveCallResult: (entities) async {
+        //TODO: Remove deleted entities
+        await _sampleDao
+            .upsertEntities(entities.map((e) => e.toEntity()).toList());
+      },
+      loadFromDb: () => _sampleDao.observeEntities().map(
+            (entities) => entities.map((e) => e.toDomainModel()).toList(),
+          ),
+      shouldFetch: (data) => true,
+      onFetchFailed: () async {},
+    ).asStream();
+  }
+
+  @override
+  Stream<Result<Sample>> observeSample({
+    required String sampleId,
+  }) {
+    return NetworkBoundResult<Sample, SampleRM>(
+      createCall: () =>
+          remoteDataSourceCall(() => _api.getSample(id: sampleId)),
+      saveCallResult: (entity) async {
+        //TODO: Remove deleted entities
+        await _sampleDao.upsertEntity(entity.toEntity());
+      },
+      loadFromDb: () => _sampleDao.observeEntity(entityId: sampleId).map(
+            ((e) => e.toDomainModel()),
+          ),
+      shouldFetch: (data) => true,
+      onFetchFailed: () async {},
+    ).asStream();
+  }
+}

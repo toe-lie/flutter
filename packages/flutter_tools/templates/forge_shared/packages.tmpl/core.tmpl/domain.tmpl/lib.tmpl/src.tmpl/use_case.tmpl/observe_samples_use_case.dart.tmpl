@@ -1,0 +1,22 @@
+import 'package:domain/domain.dart';
+import 'package:base/base.dart';
+
+class ObserveSamplesUseCaseRequest extends Equatable {
+  const ObserveSamplesUseCaseRequest();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ObserveSamplesUseCase {
+  ObserveSamplesUseCase({
+    SampleRepository? sampleRepository,
+  }) : _sampleRepository =
+      sampleRepository ?? getIt();
+
+  final SampleRepository _sampleRepository;
+
+  Stream<Result<List<Sample>>> call(ObserveSamplesUseCaseRequest request) {
+    return _sampleRepository.observeSamples();
+  }
+}

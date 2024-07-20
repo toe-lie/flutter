@@ -1,0 +1,26 @@
+import 'dart:io';
+
+import 'package:api/api.dart';
+import 'package:dio/dio.dart';
+import 'package:retrofit/http.dart';
+import 'package:retrofit/retrofit.dart';
+
+import '../utils/annotations.dart';
+
+part '{{concatenatedCaseProjectName}}_rest_client.g.dart';
+
+@RestApi()
+abstract class {{pascalCaseProjectName}}RestClient {
+  factory {{pascalCaseProjectName}}RestClient(Dio dio, {required String baseUrl}) =
+      _{{pascalCaseProjectName}}RestClient;
+
+  @GET('samples')
+  Future<ApiDataResponse<List<SampleRM>>> getSamples();
+
+
+  @GET('samples/{id}')
+  Future<ApiDataResponse<SampleRM>> getSample({
+    @Path('id') required String id,
+  });
+
+}

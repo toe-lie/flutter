@@ -1,0 +1,306 @@
+import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+final numberOnlyTextInputFormatter =
+    FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'));
+final digitOnlyTextInputFormatter = FilteringTextInputFormatter.digitsOnly;
+
+TextInputFormatter get moneyTextInputFormatter =>
+    FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}'));
+
+TextStyle? farmSuiteInputTextStyle(BuildContext context, bool inverseTheme) =>
+    context.textTheme.bodyLarge;
+
+InputDecoration farmSuiteInputDecoration(
+  BuildContext context, {
+  Color? borderColor,
+  double? borderWidth,
+  double? borderRadius,
+  bool inverseTheme = false,
+}) =>
+    const InputDecoration(
+      border: OutlineInputBorder(),
+    );
+
+class {{pascalCaseProjectName}}OutlineTextField extends StatefulWidget {
+  const {{pascalCaseProjectName}}OutlineTextField({
+    super.key,
+    this.initialValue,
+    this.enabled = true,
+    this.keyboardType,
+    this.inputFormatters,
+    this.hintStyle,
+    this.hintText,
+    this.onSubmitted,
+    this.focusNode,
+    this.onChanged,
+    this.numberOnly = false,
+    this.digitOnly = false,
+    this.readOnly = false,
+    this.onTap,
+    this.textInputAction,
+    this.labelText,
+    this.helperText,
+    this.errorText,
+    this.suffixText,
+    this.suffix,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.decoration,
+    this.textCapitalization = TextCapitalization.none,
+    this.controller,
+    this.borderColor,
+    this.borderWidth,
+    this.isDense = false,
+    this.inverseTheme = false,
+  });
+
+  final String? initialValue;
+  final bool enabled;
+  final InputDecoration? decoration;
+  final TextCapitalization textCapitalization;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final bool numberOnly;
+  final bool digitOnly;
+  final bool readOnly;
+  final Function()? onTap;
+  final TextStyle? hintStyle;
+  final String? hintText;
+  final String? labelText;
+  final String? errorText;
+  final String? helperText;
+  final String? suffixText;
+  final Widget? suffix;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final TextEditingController? controller;
+  final Color? borderColor;
+  final double? borderWidth;
+  final bool isDense;
+  final bool inverseTheme;
+
+  @override
+  State<{{pascalCaseProjectName}}OutlineTextField> createState() =>
+      _{{pascalCaseProjectName}}OutlineTextFieldState();
+}
+
+class _{{pascalCaseProjectName}}OutlineTextFieldState extends State<{{pascalCaseProjectName}}OutlineTextField> {
+  late TextEditingController _controller;
+
+  @override
+  void initState() {
+    _controller = widget.controller ?? TextEditingController();
+    super.initState();
+    if (widget.initialValue != null) {
+      _controller.text = widget.initialValue ?? '';
+    }
+  }
+
+  @override
+  void dispose() {
+// Only dispose the controller if it was created in this class
+    if (widget.controller == null) _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final inputFormatters = <TextInputFormatter>[
+      ...(widget.inputFormatters ?? []),
+      if (widget.numberOnly) numberOnlyTextInputFormatter,
+      if (widget.digitOnly) digitOnlyTextInputFormatter,
+    ];
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (widget.labelText != null && widget.labelText!.isNotEmpty)
+          {{pascalCaseProjectName}}InputFieldLabel(
+            labelText: widget.labelText ?? '',
+            inverseTheme: widget.inverseTheme,
+          ),
+        const SizedBox(height: Grid.half),
+        TextField(
+          controller: _controller,
+          enabled: widget.enabled,
+          textCapitalization: widget.textCapitalization,
+          keyboardType: widget.keyboardType,
+          inputFormatters: inputFormatters,
+          textInputAction: widget.textInputAction,
+          onSubmitted: widget.onSubmitted,
+          readOnly: widget.readOnly,
+          onTap: widget.onTap,
+          focusNode: widget.focusNode,
+          onChanged: widget.onChanged,
+          decoration: widget.decoration ??
+              farmSuiteInputDecoration(
+                context,
+                borderColor: widget.borderColor,
+                borderWidth: widget.borderWidth,
+                inverseTheme: widget.inverseTheme,
+              ).copyWith(
+                isDense: widget.isDense,
+                hintText: widget.hintText,
+                suffix: widget.suffix ??
+                    (widget.suffixText != null
+                        ? {{pascalCaseProjectName}}TextFieldSuffixText(widget.suffixText,
+                            inverseTheme: widget.inverseTheme)
+                        : null),
+                errorText: widget.errorText,
+                helperText: widget.helperText,
+                prefixIcon: widget.prefixIcon,
+                suffixIcon: widget.suffixIcon,
+                hintStyle: widget.hintStyle,
+              ),
+        ),
+      ],
+    );
+  }
+}
+
+class {{pascalCaseProjectName}}OutlinePasswordField extends StatefulWidget {
+  const {{pascalCaseProjectName}}OutlinePasswordField({
+    super.key,
+    this.initialValue,
+    this.enabled = true,
+    this.keyboardType,
+    this.inputFormatters,
+    this.hintStyle,
+    this.hintText,
+    this.onSubmitted,
+    this.focusNode,
+    this.onChanged,
+    this.readOnly = false,
+    this.onTap,
+    this.textInputAction,
+    this.labelText,
+    this.errorText,
+    this.prefixIcon,
+    this.decoration,
+    this.textCapitalization = TextCapitalization.none,
+    this.controller,
+    this.borderColor,
+    this.borderWidth,
+    this.inverseTheme = false,
+  });
+
+  final String? initialValue;
+  final bool enabled;
+  final InputDecoration? decoration;
+  final TextCapitalization textCapitalization;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onSubmitted;
+  final bool readOnly;
+  final Function()? onTap;
+  final TextStyle? hintStyle;
+  final String? hintText;
+  final String? labelText;
+  final String? errorText;
+  final Widget? prefixIcon;
+  final TextEditingController? controller;
+  final Color? borderColor;
+  final double? borderWidth;
+  final bool inverseTheme;
+
+  @override
+  State<{{pascalCaseProjectName}}OutlinePasswordField> createState() =>
+      _{{pascalCaseProjectName}}OutlinePasswordFieldState();
+}
+
+class _{{pascalCaseProjectName}}OutlinePasswordFieldState
+    extends State<{{pascalCaseProjectName}}OutlinePasswordField> {
+  late TextEditingController _controller;
+  bool _obscureText = true;
+
+  @override
+  void initState() {
+    _controller = widget.controller ?? TextEditingController();
+    super.initState();
+    if (widget.initialValue != null) {
+      _controller.text = widget.initialValue ?? '';
+    }
+  }
+
+  @override
+  void dispose() {
+// Only dispose the controller if it was created in this class
+    if (widget.controller == null) _controller.dispose();
+    super.dispose();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
+  IconData get _passwordVisibilityIcon =>
+      _obscureText ? Icons.visibility : Icons.visibility_off;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.labelText != null && widget.labelText!.isNotEmpty)
+          {{pascalCaseProjectName}}InputFieldLabel(labelText: widget.labelText ?? ''),
+        const SizedBox(height: Grid.half),
+        TextField(
+          controller: _controller,
+          enabled: widget.enabled,
+          textCapitalization: widget.textCapitalization,
+          keyboardType: widget.keyboardType,
+          inputFormatters: widget.inputFormatters,
+          textInputAction: widget.textInputAction,
+          onSubmitted: widget.onSubmitted,
+          readOnly: widget.readOnly,
+          onTap: widget.onTap,
+          focusNode: widget.focusNode,
+          onChanged: widget.onChanged,
+          // style: farmSuiteInputTextStyle(context, widget.inverseTheme),
+          obscureText: _obscureText,
+          decoration: widget.decoration ??
+              farmSuiteInputDecoration(context).copyWith(
+                hintText: widget.hintText,
+                suffixIcon: IconButton(
+                  onPressed: _togglePasswordVisibility,
+                  icon: Icon(_passwordVisibilityIcon),
+                ),
+                errorText: widget.errorText,
+                prefixIcon: widget.prefixIcon,
+                hintStyle: widget.hintStyle,
+              ),
+        ),
+      ],
+    );
+  }
+}
+
+class {{pascalCaseProjectName}}TextFieldSuffixText extends StatelessWidget {
+  const {{pascalCaseProjectName}}TextFieldSuffixText(
+    this.suffixText, {
+    required this.inverseTheme,
+    super.key,
+  });
+
+  final String? suffixText;
+  final bool inverseTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      suffixText ?? '',
+      style: context.textTheme.labelLarge,
+    );
+  }
+}

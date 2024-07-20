@@ -1,0 +1,7 @@
+import 'domain_exception.dart';
+
+class ClientDomainException extends DomainException {
+  const ClientDomainException([super.message = '', this.errors]);
+
+  final Map<String, List<String>>? errors;
+}

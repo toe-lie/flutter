@@ -1,0 +1,14 @@
+import 'package:api/api.dart';
+import 'package:base/base.dart';
+import 'package:database/database.dart';
+
+import 'mappers.dart';
+
+extension SampleRMToEntityMapper on SampleRM {
+  SampleEntity toEntity() {
+    return SampleEntity(
+      id: id?.toString() ?? (throw Exception('Livelihood id is null')),
+      name: name ?? '',
+    );
+  }
+}

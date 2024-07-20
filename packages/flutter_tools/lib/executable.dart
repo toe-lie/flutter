@@ -29,6 +29,7 @@ import 'src/commands/downgrade.dart';
 import 'src/commands/drive.dart';
 import 'src/commands/emulators.dart';
 import 'src/commands/forge.dart';
+import 'src/commands/forge_generate.dart';
 import 'src/commands/generate.dart';
 import 'src/commands/generate_localizations.dart';
 import 'src/commands/ide_config.dart';
@@ -207,6 +208,7 @@ List<FlutterCommand> generateCommands({
   ),
   CreateCommand(verboseHelp: verboseHelp),
   ForgeCommand(verboseHelp: verboseHelp),
+  ForgeGenerateCommand(verbose: verboseHelp),
   DaemonCommand(hidden: !verboseHelp),
   DebugAdapterCommand(verboseHelp: verboseHelp),
   DevicesCommand(verboseHelp: verboseHelp),

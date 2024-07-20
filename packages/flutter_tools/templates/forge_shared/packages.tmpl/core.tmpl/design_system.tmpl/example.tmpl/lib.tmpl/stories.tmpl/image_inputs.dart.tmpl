@@ -1,0 +1,92 @@
+import 'dart:collection';
+
+import 'package:design_system/design_system.dart';
+import 'package:flutter/material.dart';
+import 'package:storybook_flutter/storybook_flutter.dart';
+
+class SingleImageInputPreview extends StatefulWidget {
+  const SingleImageInputPreview({super.key});
+
+  @override
+  State<SingleImageInputPreview> createState() =>
+      _SingleImageInputPreviewState();
+}
+
+class _SingleImageInputPreviewState extends State<SingleImageInputPreview> {
+  Uri? uri;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: {{pascalCaseProjectName}}SingleImageInput(
+        imageUrl: uri,
+        onImageUrlChanged: (newUri) {
+          setState(() {
+            uri = newUri;
+          });
+        },
+        onPickImageError: (_) {},
+        labelText: context.knobs.text(
+          label: 'label text',
+          initial: 'Add image',
+        ),
+      ),
+    );
+  }
+}
+
+class MultipleImageInputPreview extends StatefulWidget {
+  const MultipleImageInputPreview({super.key});
+
+  @override
+  State<MultipleImageInputPreview> createState() =>
+      _MultipleImageInputPreviewState();
+}
+
+class _MultipleImageInputPreviewState extends State<MultipleImageInputPreview> {
+  List<Uri> uris = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: {{pascalCaseProjectName}}MultipleImageInput(
+        imageUrls: UnmodifiableListView(uris),
+        onImageUrlsChanged: (newUris) {
+          setState(() {
+            uris = newUris;
+          });
+        },
+        onPickImageError: (_) {},
+        maxImages: context.knobs.sliderInt(
+          label: 'max images',
+          initial: 3,
+          max: 10,
+          min: 1,
+        ),
+        labelText: context.knobs.text(
+          label: 'label text',
+          initial: 'Add images',
+        ),
+      ),
+    );
+  }
+}
+
+List<Story> getImageInputStories({{pascalCaseProjectName}}ThemeData theme) {
+  return [
+    Story(
+      name: 'Widgets/Image Inputs/Single',
+      description: 'Single Image Input',
+      builder: (BuildContext context) {
+        return const SingleImageInputPreview();
+      },
+    ),
+    Story(
+      name: 'Widgets/Image Inputs/Multiple',
+      description: 'Multiple Images Input',
+      builder: (BuildContext context) {
+        return const MultipleImageInputPreview();
+      },
+    ),
+  ];
+}

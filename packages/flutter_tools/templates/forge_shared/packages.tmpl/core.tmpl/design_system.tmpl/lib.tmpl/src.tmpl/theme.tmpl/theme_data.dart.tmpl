@@ -1,0 +1,137 @@
+import 'package:assets/assets.dart';
+import 'package:flutter/material.dart';
+
+abstract class {{pascalCaseProjectName}}ThemeData {
+  const {{pascalCaseProjectName}}ThemeData({required this.locale});
+
+  final Locale locale;
+
+  ThemeData get materialThemeData;
+
+  final ColorScheme _lightColorScheme = const ColorScheme(
+    brightness: Brightness.light,
+    primary: Color(0xFF2ECC71),
+    onPrimary: Color(0xFFFFFFFF),
+    primaryContainer: Color(0xFFA7F4C3),
+    onPrimaryContainer: Color(0xFF003D1F),
+    secondary: Color(0xFFF1C40F),
+    onSecondary: Color(0xFF000000),
+    secondaryContainer: Color(0xFFFFD740),
+    onSecondaryContainer: Color(0xFF4A3600),
+    tertiary: Color(0xFFE94F4A),
+    onTertiary: Color(0xFFFFFFFF),
+    tertiaryContainer: Color(0xFFFFDAD6),
+    onTertiaryContainer: Color(0xFF5F0A08),
+    error: Color(0xFFB00020),
+    onError: Color(0xFFFFFFFF),
+    errorContainer: Color(0xFFF9DEDC),
+    onErrorContainer: Color(0xFF410E0B),
+    surface: Color(0xFFFFFFFF),
+    onSurface: Color(0xFF000000),
+    surfaceContainerHighest: Color(0xFFE0E0E0),
+    onSurfaceVariant: Color(0xFF4A4A4A),
+    outline: Color(0xFF757575),
+    outlineVariant: Color(0xFFBDBDBD),
+    shadow: Color(0xFF000000),
+    scrim: Color(0xFF000000),
+    inverseSurface: Color(0xFF303030),
+    onInverseSurface: Color(0xFFFFFFFF),
+    inversePrimary: Color(0xFF76D7C4),
+    surfaceTint: Color(0xFF2ECC71),
+  );
+
+  final ColorScheme _darkColorScheme = const ColorScheme(
+    brightness: Brightness.dark,
+    primary: Color(0xFF2ECC71),
+    onPrimary: Color(0xFF000000),
+    primaryContainer: Color(0xFF1B3B2D),
+    onPrimaryContainer: Color(0xFFA7F4C3),
+    secondary: Color(0xFFF1C40F),
+    onSecondary: Color(0xFF000000),
+    secondaryContainer: Color(0xFF4A3600),
+    onSecondaryContainer: Color(0xFFFFD740),
+    tertiary: Color(0xFFE94F4A),
+    onTertiary: Color(0xFF000000),
+    tertiaryContainer: Color(0xFF5F0A08),
+    onTertiaryContainer: Color(0xFFFFDAD6),
+    error: Color(0xFFCF6679),
+    onError: Color(0xFF000000),
+    errorContainer: Color(0xFF8B0000),
+    onErrorContainer: Color(0xFFF9DEDC),
+    surface: Color(0xFF1E1E1E),
+    onSurface: Color(0xFFFFFFFF),
+    surfaceContainerHighest: Color(0xFF303030),
+    onSurfaceVariant: Color(0xFFBDBDBD),
+    outline: Color(0xFF757575),
+    outlineVariant: Color(0xFF4A4A4A),
+    shadow: Color(0xFF000000),
+    scrim: Color(0xFF000000),
+    inverseSurface: Color(0xFFFFFFFF),
+    onInverseSurface: Color(0xFF000000),
+    inversePrimary: Color(0xFF76D7C4),
+    surfaceTint: Color(0xFF2ECC71),
+  );
+
+  static const _regular = FontWeight.w400;
+  static const _medium = FontWeight.w500;
+  static const _semiBold = FontWeight.w600;
+  static const _bold = FontWeight.w700;
+
+  final TextTheme _textTheme = const TextTheme(
+    headlineLarge: TextStyle(fontWeight: _regular, fontSize: 32.0),
+    headlineMedium: TextStyle(fontWeight: _regular, fontSize: 28.0),
+    headlineSmall: TextStyle(fontWeight: _regular, fontSize: 24.0),
+
+    bodyLarge: TextStyle(fontWeight: _regular, fontSize: 16.0),
+    bodyMedium: TextStyle(fontWeight: _regular, fontSize: 14.0),
+    bodySmall: TextStyle(fontWeight: _regular, fontSize: 12.0),
+
+    titleLarge: TextStyle(fontWeight: _semiBold, fontSize: 22.0),
+    titleMedium: TextStyle(fontWeight: _semiBold, fontSize: 16.0),
+    titleSmall: TextStyle(fontWeight: _medium, fontSize: 14.0),
+
+    labelLarge: TextStyle(fontWeight: _medium, fontSize: 14.0),
+    labelMedium: TextStyle(fontWeight: _medium, fontSize: 12.0),
+    labelSmall: TextStyle(fontWeight: _medium, fontSize: 11.0),
+  );
+}
+
+class Light{{pascalCaseProjectName}}ThemeData extends {{pascalCaseProjectName}}ThemeData {
+  Light{{pascalCaseProjectName}}ThemeData({required super.locale});
+
+  @override
+  ThemeData get materialThemeData => ThemeData(
+        fontFamily: {{pascalCaseProjectName}}FontFamily.getFontFamilyByLocale(locale),
+        textTheme: _textTheme,
+        colorScheme: _lightColorScheme,
+        appBarTheme: AppBarTheme(
+          backgroundColor: _lightColorScheme.surface,
+          foregroundColor: _lightColorScheme.onSurface,
+        ),
+        scaffoldBackgroundColor: _lightColorScheme.surface,
+        useMaterial3: true,
+      );
+}
+
+class Dark{{pascalCaseProjectName}}ThemeData extends {{pascalCaseProjectName}}ThemeData {
+  Dark{{pascalCaseProjectName}}ThemeData({required super.locale});
+
+  @override
+  ThemeData get materialThemeData => ThemeData(
+        fontFamily: {{pascalCaseProjectName}}FontFamily.getFontFamilyByLocale(locale),
+        textTheme: _textTheme,
+        colorScheme: _darkColorScheme,
+        appBarTheme: AppBarTheme(
+          backgroundColor: _darkColorScheme.surface,
+          foregroundColor: _darkColorScheme.onSurface,
+        ),
+        scaffoldBackgroundColor: _darkColorScheme.surface,
+        useMaterial3: true,
+      );
+}
+
+extension TextThemeX on TextTheme {
+  TextStyle get custom => const TextStyle();
+
+  TextStyle? get buttonText => labelLarge;
+}

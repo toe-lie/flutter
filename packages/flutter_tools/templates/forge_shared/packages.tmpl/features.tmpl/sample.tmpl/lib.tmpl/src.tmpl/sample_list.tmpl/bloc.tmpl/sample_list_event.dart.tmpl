@@ -1,0 +1,12 @@
+part of 'sample_list_bloc.dart';
+
+sealed class SampleListEvent extends Equatable {
+  const SampleListEvent();
+}
+
+class SampleListFetched extends SampleListEvent {
+  const SampleListFetched();
+
+  @override
+  List<Object> get props => [];
+}

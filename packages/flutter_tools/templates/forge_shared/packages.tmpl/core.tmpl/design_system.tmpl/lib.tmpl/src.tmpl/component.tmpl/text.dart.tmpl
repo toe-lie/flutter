@@ -1,0 +1,52 @@
+import 'package:decimal/decimal.dart';
+import 'package:design_system/design_system.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:localization/localization.dart';
+
+class {{pascalCaseProjectName}}InputFieldLabel extends StatelessWidget {
+  const {{pascalCaseProjectName}}InputFieldLabel({
+    super.key,
+    required this.labelText,
+    this.inverseTheme = false,
+  });
+
+  final String labelText;
+  final bool inverseTheme;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      labelText,
+      style: context.textTheme.bodyLarge,
+      //     .copyWith(
+      //   fontSize: 16,
+      //   fontWeight: FontWeight.w700,
+      //   color: inverseTheme
+      //       ? context.colorScheme.textPrimaryInverse
+      //       : context.colorScheme.textPrimary,
+      // ),
+    );
+  }
+}
+
+class {{pascalCaseProjectName}}ErrorText extends StatelessWidget {
+  const {{pascalCaseProjectName}}ErrorText({
+    super.key,
+    required this.errorText,
+  });
+
+  final String errorText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      errorText,
+      style: context.textTheme.custom.copyWith(
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+        color: context.colorScheme.error,
+      ),
+    );
+  }
+}

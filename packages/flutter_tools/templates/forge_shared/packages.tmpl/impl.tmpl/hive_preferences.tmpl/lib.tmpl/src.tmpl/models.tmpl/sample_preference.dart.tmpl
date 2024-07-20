@@ -1,0 +1,37 @@
+import 'package:domain/domain.dart';
+import 'package:hive/hive.dart';
+
+import '../hive_ids.dart';
+
+part 'sample_preference.g.dart';
+
+@HiveType(typeId: HiveTypeId.samplePreference)
+class SamplePreference {
+  SamplePreference({
+    required this.id,
+    required this.name,
+  });
+
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
+  final String name;
+
+  factory SamplePreference.fromDomainModel(Sample sample) {
+    return SamplePreference(
+      id: sample.id,
+      name: sample.name,
+    );
+  }
+
+  static SamplePreference? fromDomainModelOrNull(Sample? sample) {
+    return sample != null ? SamplePreference.fromDomainModel(sample) : null;
+  }
+
+  Sample toDomainModel() {
+    return Sample(
+      id: id,
+      name: name,
+    );
+  }
+}

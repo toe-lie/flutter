@@ -1,0 +1,54 @@
+import 'package:base/base.dart';
+import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'sample_entity.g.dart';
+
+@JsonSerializable()
+class SampleEntity extends Equatable {
+  const SampleEntity({
+    required this.id,
+    required this.name,
+  });
+
+  @JsonKey(name: 'id')
+  final String id;
+  @JsonKey(name: 'name')
+  final String name;
+
+  @override
+  List<Object> get props => [id, name,];
+
+  SampleEntity copyWith({
+    String? id,
+    String? name,
+  }) {
+    return SampleEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+    );
+  }
+
+  factory SampleEntity.fromJson(Map<String, dynamic> json) =>
+      _$SampleEntityFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SampleEntityToJson(this);
+
+  factory SampleEntity.fromDomainModel(Sample sample) {
+    return SampleEntity(
+      id: sample.id,
+      name: sample.name,
+    );
+  }
+
+  static SampleEntity? fromDomainModelOrNull(Sample? district) {
+    return district != null ? SampleEntity.fromDomainModel(district) : null;
+  }
+
+  Sample toDomainModel() {
+    return Sample(
+      id: id,
+      name: name,
+    );
+  }
+}

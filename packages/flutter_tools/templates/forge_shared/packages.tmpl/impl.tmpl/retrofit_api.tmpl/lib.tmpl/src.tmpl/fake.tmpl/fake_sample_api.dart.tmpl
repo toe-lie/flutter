@@ -1,0 +1,47 @@
+import 'dart:convert';
+
+import 'package:api/api.dart';
+import 'package:base/base.dart';
+import 'package:flutter/services.dart';
+
+class Fake{{pascalCaseProjectName}}Api extends {{pascalCaseProjectName}}Api {
+  Future<T> readDataJson<T>({
+    required String jsonFileName,
+    required T Function(Map<String, dynamic>) fromJson,
+  }) async {
+    final data = await rootBundle
+        .loadString('packages/retrofit_api/assets/json/$jsonFileName');
+    final response = ApiDataResponse.fromJson(
+        jsonDecode(data), (json) => fromJson(json as Map<String, dynamic>));
+    return response.data;
+  }
+
+  Future<List<T>> readDataListJson<T>({
+    required String jsonFileName,
+    required T Function(Map<String, dynamic>) fromJson,
+  }) async {
+    final data = await rootBundle
+        .loadString('packages/retrofit_api/assets/json/$jsonFileName');
+    final response = ApiDataResponse.fromJson(
+        jsonDecode(data), (json) => (json as List).map((e) => fromJson(e)).toList());
+    return response.data;
+  }
+
+  @override
+  Future<SampleRM> getSample({required String id}) async {
+    final list = await readDataListJson(
+      jsonFileName: 'samples.json',
+      fromJson: (json) => SampleRM.fromJson(json),
+    );
+    return list.firstWhere((element) => element.id == id.toIntOrThrow());
+  }
+
+  @override
+  Future<List<SampleRM>> getSamples() async {
+    return readDataListJson(
+      jsonFileName: 'samples.json',
+      fromJson: (json) => SampleRM.fromJson(json),
+    );
+  }
+
+}

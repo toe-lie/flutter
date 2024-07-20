@@ -1,0 +1,122 @@
+import 'package:flutter/material.dart';
+
+extension ColorSchemeExt on ColorScheme {
+  Color get info => brightness == Brightness.light
+      ? const Color(0xFF3498DB)
+      : const Color(0xFF2980B9);
+
+  Color get onInfo => brightness == Brightness.light
+      ? const Color(0xFFFFFFFF)
+      : const Color(0xFFFFFFFF);
+
+  Color get warning => brightness == Brightness.light
+      ? const Color(0xFFF39C12)
+      : const Color(0xFFD35400);
+
+  Color get onWarning => brightness == Brightness.light
+      ? const Color(0xFFFFFFFF)
+      : const Color(0xFFFFFFFF);
+
+  Color get alert => brightness == Brightness.light
+      ? const Color(0xFFE74C3C)
+      : const Color(0xFFC0392B);
+
+  Color get onAlert => brightness == Brightness.light
+      ? const Color(0xFFFFFFFF)
+      : const Color(0xFFFFFFFF);
+
+  Color get success => brightness == Brightness.light
+      ? const Color(0xFF2ECC71)
+      : const Color(0xFF27AE60);
+
+  // 'info': Color(0xFF3498DB),
+  // 'onInfo': Color(0xFFFFFFFF),
+  // 'warning': Color(0xFFF39C12),
+  // 'onWarning': Color(0xFFFFFFFF),
+  // 'alert': Color(0xFFE74C3C),
+  // 'onAlert': Color(0xFFFFFFFF),
+  // 'success': Color(0xFF2ECC71),
+  // 'onSuccess': Color(0xFFFFFFFF),
+
+  Color get positive => primary;
+
+  Color get negative => error;
+
+  // Color get border => brightness == Brightness.light
+  //     ? FarmSuiteColors.border
+  //     : FarmSuiteColors.border;
+  //
+  // Color get borderInverse => brightness == Brightness.light
+  //     ? FarmSuiteColors.border
+  //     : FarmSuiteColors.border;
+  //
+  // Color get body => brightness == Brightness.light
+  //     ? FarmSuiteColors.body
+  //     : FarmSuiteColors.body;
+
+  // Color get textPrimary =>
+  //     brightness == Brightness.light ? onSurface : onSurface.withOpacity(0.87);
+  //
+  // Color get textSecondary => onSurface.withOpacity(0.56);
+  //
+  // Color get textPrimaryInverse =>
+  //     brightness == Brightness.light ? onPrimary : onPrimary.withOpacity(0.87);
+  //
+  // Color get textSecondaryInverse => onPrimary.withOpacity(0.56);
+
+  // Color get buttonBackgroundOnSurface => brightness == Brightness.light
+  //     ? FarmSuiteColors.grey100
+  //     : FarmSuiteColors.grey100;
+  //
+  // Color get buttonBackgroundOnPrimary => brightness == Brightness.light
+  //     ? FarmSuiteColors.grey100
+  //     : FarmSuiteColors.grey100;
+  //
+  // Color get surfaceInverse =>
+  //     brightness == Brightness.light ? Colors.black : Colors.white;
+  //
+  Color get textHighEmphasis =>
+      brightness == Brightness.light ? onSurface : onSurface.withOpacity(0.87);
+
+  Color get textMediumEmphasis => brightness == Brightness.light
+      ? onSurface.withOpacity(0.6)
+      : onSurface.withOpacity(0.6);
+
+  Color get textDisabled => brightness == Brightness.light
+      ? onSurface.withOpacity(0.38)
+      : onSurface.withOpacity(0.38);
+
+  Color get iconHighEmphasis =>
+      brightness == Brightness.light ? onSurface : onSurface.withOpacity(0.87);
+
+  Color get iconMediumEmphasis => brightness == Brightness.light
+      ? onSurface.withOpacity(0.6)
+      : onSurface.withOpacity(0.6);
+
+  Color get iconDisabled => brightness == Brightness.light
+      ? onSurface.withOpacity(0.38)
+      : onSurface.withOpacity(0.38);
+}
+
+ class FarmSuiteColors {
+//   static const Color greenOne = Color(0xFF34AF80);
+//   static const Color greenTwo = Color(0xFF008153);
+//   static const Color biege = Color(0xFFFED8AB);
+//   static const Color blue = Color(0xFF0284C7);
+//   static const Color body = Color(0xFF4b5563);
+//   static const Color grey50 = Color(0xFFF9FAFB);
+//   static const Color grey100 = Color(0xFFF3F4F6);
+//   static const Color grey200 = Color(0xFFE5E7EB);
+//   static const Color grey400 = Color(0xFF9CA3AF);
+//
+//   //TODO: inlining the color
+//   static const Color border = Color(0xFFE5E5EA);
+//
+  static const Color red = Color(0xFFD0021B);
+  static const Color yellow = Color(0xFFF7B500);
+  static const Color orange = Color(0xFFD87706);
+}
+
+class CustomColor extends Color {
+  const CustomColor(super.value);
+}

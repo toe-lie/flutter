@@ -1,0 +1,14 @@
+import 'dart:async';
+import 'dart:ui';
+
+import 'package:base/base.dart';
+import 'package:bloc/bloc.dart';
+import 'package:domain/domain.dart';
+
+part 'app_event.dart';
+
+part 'app_state.dart';
+
+class AppBloc extends Bloc<AppEvent, AppState> {
+  AppBloc() : super(AppState.create());
+}

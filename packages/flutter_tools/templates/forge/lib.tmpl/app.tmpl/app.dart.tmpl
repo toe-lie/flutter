@@ -1,0 +1,96 @@
+import 'package:base/base.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localized_locales/flutter_localized_locales.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:ui/ui.dart';
+
+import '../navigation/app_navigation.dart';
+import 'bloc/app_bloc.dart';
+
+class HelloForgeAppEntry extends StatefulWidget {
+  const HelloForgeAppEntry({super.key});
+
+  @override
+  State<HelloForgeAppEntry> createState() => _HelloForgeAppEntryState();
+}
+
+class _HelloForgeAppEntryState extends State<HelloForgeAppEntry> {
+  final _appBloc = AppBloc();
+  late AppNavigation _appNavigator;
+
+  @override
+  void initState() {
+    _appNavigator = AppNavigation(appStateStream: _appBloc.stream);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: getIt.allReady(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return BlocProvider<AppBloc>(
+            create: (_) => _appBloc,
+            child: HelloForgeApp(
+                appNavigation: _appNavigator
+            ),
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+}
+
+class HelloForgeApp extends StatelessWidget {
+
+  const HelloForgeApp({
+    super.key,
+    required this.appNavigation,
+  });
+
+  final AppNavigation appNavigation;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppBloc, AppState>(
+      buildWhen: (previous, current) => previous.locale != current.locale,
+      builder: (context, state) {
+        final locale = state.locale;
+        final lightTheme = Light{{pascalCaseProjectName}}ThemeData(locale: locale);
+        final darkTheme = Dark{{pascalCaseProjectName}}ThemeData(locale: locale);
+        return {{pascalCaseProjectName}}Theme(
+          lightTheme: lightTheme,
+          darkTheme: darkTheme,
+          child: MaterialApp.router(
+            builder: (context, child) => ResponsiveBreakpoints.builder(
+              breakpoints: [
+                Breakpoint(start: WindowSizeClass.compact.maxWidth, end: WindowSizeClass.compact.maxWidth, name: WindowSizeClass.compact.name),
+                Breakpoint(start: WindowSizeClass.medium.minWidth, end: WindowSizeClass.medium.maxWidth, name: WindowSizeClass.medium.name),
+                Breakpoint(start: WindowSizeClass.expanded.minWidth, end: WindowSizeClass.expanded.maxWidth, name: WindowSizeClass.expanded.name),
+                Breakpoint(start: WindowSizeClass.large.minWidth, end: WindowSizeClass.large.maxWidth, name: WindowSizeClass.large.name),
+                Breakpoint(start: WindowSizeClass.xlarge.minWidth, end: WindowSizeClass.xlarge.maxWidth, name: WindowSizeClass.xlarge.name),
+              ],
+              child: child!,
+            ),
+            debugShowCheckedModeBanner: false,
+            title: 'Hello Forge',
+            restorationScopeId: 'router',
+            theme: lightTheme.materialThemeData,
+            darkTheme: darkTheme.materialThemeData,
+            routerConfig: appNavigation.router,
+            locale: locale,
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              LocaleNamesLocalizationsDelegate(),
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        );
+      },
+    );
+  }
+}

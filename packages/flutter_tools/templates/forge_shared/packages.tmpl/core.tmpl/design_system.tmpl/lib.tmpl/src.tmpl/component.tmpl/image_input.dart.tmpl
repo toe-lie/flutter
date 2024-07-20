@@ -1,0 +1,314 @@
+import 'package:base/base.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:localization/localization.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../design_system.dart';
+
+class {{pascalCaseProjectName}}SingleImageInput extends StatelessWidget {
+  const {{pascalCaseProjectName}}SingleImageInput({
+    super.key,
+    required this.imageUrl,
+    required this.onImageUrlChanged,
+    required this.onPickImageError,
+    this.labelText,
+  });
+
+  final Uri? imageUrl;
+  final Function(Uri?) onImageUrlChanged;
+  final Function(dynamic) onPickImageError;
+  final String? labelText;
+
+  @override
+  Widget build(BuildContext context) {
+    return {{pascalCaseProjectName}}ImageInput(
+      imageUrls: UnmodifiableListView(imageUrl != null ? <Uri>[imageUrl!] : []),
+      onImageUrlsChanged: (newImageUrls) {
+        onImageUrlChanged(newImageUrls.firstOrNull);
+      },
+      maxImages: 1,
+      onPickImageError: onPickImageError,
+      labelText: labelText,
+    );
+  }
+}
+
+class {{pascalCaseProjectName}}MultipleImageInput extends StatelessWidget {
+  const {{pascalCaseProjectName}}MultipleImageInput({
+    super.key,
+    required this.imageUrls,
+    required this.onImageUrlsChanged,
+    required this.onPickImageError,
+    required this.labelText,
+    this.maxImages = 5,
+  });
+
+  final UnmodifiableListView<Uri> imageUrls;
+  final Function(List<Uri>) onImageUrlsChanged;
+  final Function(dynamic) onPickImageError;
+  final int maxImages;
+  final String? labelText;
+
+  @override
+  Widget build(BuildContext context) {
+    return {{pascalCaseProjectName}}ImageInput(
+      imageUrls: imageUrls,
+      onImageUrlsChanged: (newImageUrls) {
+        onImageUrlsChanged(newImageUrls);
+      },
+      maxImages: maxImages,
+      onPickImageError: onPickImageError,
+      labelText: labelText,
+    );
+  }
+}
+
+class {{pascalCaseProjectName}}ImageInput extends StatefulWidget {
+  const {{pascalCaseProjectName}}ImageInput({
+    super.key,
+    required this.imageUrls,
+    required this.maxImages,
+    required this.onImageUrlsChanged,
+    required this.onPickImageError,
+    this.labelText,
+  });
+
+  final UnmodifiableListView<Uri> imageUrls;
+  final Function(List<Uri>) onImageUrlsChanged;
+  final Function(dynamic) onPickImageError;
+  final int maxImages;
+  final String? labelText;
+
+  @override
+  State<{{pascalCaseProjectName}}ImageInput> createState() => _{{pascalCaseProjectName}}ImageInputState();
+
+  bool get isMultiple => maxImages > 1;
+
+  bool get reachedMaxImages => imageUrls.length >= maxImages;
+}
+
+class _{{pascalCaseProjectName}}ImageInputState extends State<{{pascalCaseProjectName}}ImageInput> {
+  final ImagePicker _picker = ImagePicker();
+  final PageController _pageController = PageController(
+    initialPage: 0,
+  );
+
+  void notifyImageAdded(XFile value) {
+    final newImageUrls = widget.imageUrls + [Uri.file(value.path)];
+    widget.onImageUrlsChanged(newImageUrls);
+    if (_pageController.hasClients) {
+      animateToPage(newImageUrls.length);
+    }
+  }
+
+  void notifyImageRemoved(int index) {
+    final newImageUrls = widget.imageUrls.toList();
+    newImageUrls.removeAt(index);
+    widget.onImageUrlsChanged(newImageUrls);
+  }
+
+  void notifyImagesAdded(List<XFile> values) {
+    widget.onImageUrlsChanged(
+        widget.imageUrls + values.map((e) => Uri.file(e.path)).toList());
+  }
+
+  void animateToPage(int page) {
+    _pageController.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final reachedMaxImages = widget.reachedMaxImages;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (widget.labelText != null && widget.labelText!.isNotEmpty) ...[
+          {{pascalCaseProjectName}}InputFieldLabel(
+            labelText: widget.labelText ?? '',
+          ),
+          const SizedBox(height: Grid.half),
+        ],
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: context.colorScheme.outline,
+              width: 1,
+            ),
+            borderRadius: BorderRadius.circular(BorderRadiusSize.normal),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AspectRatio(
+                aspectRatio: 16 / 9,
+                child: ClipRRect(
+                  clipBehavior: Clip.antiAlias,
+                  borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(BorderRadiusSize.normal),
+                      topRight: Radius.circular(BorderRadiusSize.normal)),
+                  child: widget.imageUrls.isEmpty
+                      ? const {{pascalCaseProjectName}}Image(
+                          '',
+                          width: double.infinity,
+                          height: double.infinity,
+                        )
+                      : _ImagePreviewPager(
+                          imageUrls: widget.imageUrls,
+                          onImageRemoved: (index) => notifyImageRemoved(index),
+                          pageController: _pageController,
+                        ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: {{pascalCaseProjectName}}TextButton(
+                      enabled: !reachedMaxImages,
+                      icon: const Icon(Icons.add_a_photo),
+                      labelText: context.l10n.buttonTextTakePhoto,
+                      onPressed: () => _onImageButtonPressed(
+                        ImageSource.camera,
+                        context: context,
+                        isMultiple: widget.isMultiple,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: {{pascalCaseProjectName}}TextButton(
+                      enabled: !reachedMaxImages,
+                      icon: const Icon(Icons.add_photo_alternate),
+                      labelText: context.l10n.buttonTextChooseFromGallery,
+                      onPressed: () => _onImageButtonPressed(
+                        ImageSource.gallery,
+                        context: context,
+                        isMultiple: widget.isMultiple,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _onImageButtonPressed(
+    ImageSource source, {
+    required BuildContext context,
+    required bool isMultiple,
+  }) async {
+    if (!context.mounted) return;
+
+    try {
+      if (isMultiple && source == ImageSource.gallery) {
+        final List<XFile> pickedFiles = await _picker.pickMultiImage();
+        if (pickedFiles.isNotEmpty) {
+          if (isExceededMaxImages(pickedFiles)) {
+            notifyImagesAdded(
+                pickedFiles.getRange(0, remainingImageSlot).toList());
+          } else {
+            notifyImagesAdded(pickedFiles);
+          }
+        }
+      } else {
+        final XFile? pickedFile = await _picker.pickImage(
+          source: source,
+        );
+        if (pickedFile != null) {
+          notifyImageAdded(pickedFile);
+        }
+      }
+    } catch (e) {
+      widget.onPickImageError(e);
+    }
+  }
+
+  int get remainingImageSlot => widget.maxImages - widget.imageUrls.length;
+
+  bool isExceededMaxImages(List<XFile> pickedFiles) =>
+      (pickedFiles.length + widget.imageUrls.length) > widget.maxImages;
+}
+
+class _ImagePreviewPager extends StatefulWidget {
+  const _ImagePreviewPager({
+    required this.imageUrls,
+    required this.onImageRemoved,
+    required this.pageController,
+  });
+
+  final List<Uri> imageUrls;
+  final Function(int) onImageRemoved;
+  final PageController pageController;
+
+  @override
+  State<_ImagePreviewPager> createState() => _ImagePreviewPagerState();
+}
+
+class _ImagePreviewPagerState extends State<_ImagePreviewPager> {
+  @override
+  Widget build(BuildContext context) {
+    final length = widget.imageUrls.length;
+    return Stack(
+      children: [
+        PageView(
+          controller: widget.pageController,
+          children: widget.imageUrls.map((url) {
+            return {{pascalCaseProjectName}}Image.uri(
+              url,
+              width: double.infinity,
+              height: double.infinity,
+              showMessage: true,
+            );
+          }).toList(),
+        ),
+        Visibility(
+          visible: length > 1,
+          child: Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SmoothPageIndicator(
+                    count: length,
+                    effect: WormEffect(
+                      spacing: 8.0,
+                      strokeWidth: 0.0,
+                      dotWidth: 8.0,
+                      dotHeight: 8.0,
+                      dotColor: context.colorScheme.onSurface.withOpacity(0.5),
+                      activeDotColor: context.colorScheme.primary,
+                    ),
+                    controller: widget.pageController,
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: length > 0,
+          child: Align(
+            alignment: Alignment.topRight,
+            child: IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                final int? currentPage = widget.pageController.page?.toInt();
+                if (currentPage != null) {
+                  widget.onImageRemoved(currentPage);
+                }
+              },
+            ),
+          ),
+        )
+      ],
+    );
+  }
+}

@@ -1,0 +1,28 @@
+import 'package:preferences/preferences.dart';
+import 'package:dio/dio.dart';
+
+class AcceptLanguageInterceptor extends QueuedInterceptor {
+  AcceptLanguageInterceptor({
+    required this.preferencesDataSource,
+  });
+
+  final PreferencesDataSource preferencesDataSource;
+
+  @override
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
+    final languageCode = 'en'; //await preferencesDataSource.getLanguage();
+    options.setAcceptLanguageHeader(languageCode);
+    handler.next(options);
+  }
+
+}
+extension on RequestOptions {
+
+  void setAcceptLanguageHeader(String locale) {
+    headers['Accept-Language'] = locale;
+  }
+
+}

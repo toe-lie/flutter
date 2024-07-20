@@ -1,0 +1,20 @@
+import 'package:decimal/decimal.dart';
+import 'package:decimal/intl.dart';
+import 'package:intl/intl.dart';
+
+extension DecimalFormatter on Decimal {
+  String asString({
+    required String locale,
+  }) {
+    final formatter = NumberFormat.decimalPattern(locale);
+    return formatter.format(DecimalIntl(this));
+  }
+
+  String asCurrencyString({
+    required String locale,
+    required String symbol,
+  }) {
+    final formatter = NumberFormat.currency(locale: locale, symbol: symbol);
+    return formatter.format(DecimalIntl(this));
+  }
+}

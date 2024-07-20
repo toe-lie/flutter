@@ -1,0 +1,36 @@
+import 'package:api/api.dart';
+import 'package:base/base.dart';
+import 'package:domain/domain.dart';
+import 'package:json_annotation/json_annotation.dart';
+
+part 'sample_rm.g.dart';
+
+@JsonSerializable(createToJson: false)
+class SampleRM extends Equatable {
+  const SampleRM({
+    this.id,
+    this.name,
+  });
+
+  @JsonKey(name: 'id')
+  final int? id;
+  @JsonKey(name: 'name')
+  final String? name;
+
+  @override
+  List<Object?> get props => [
+        id,
+        name,
+      ];
+
+  factory SampleRM.fromJson(Map<String, dynamic> json) => _$SampleRMFromJson(json);
+}
+
+extension SampleRMX on SampleRM {
+  Sample toDomainModel() {
+    return Sample(
+      id: id?.toString() ?? (throw Exception('id must not be null')),
+      name: name ?? '',
+    );
+  }
+}

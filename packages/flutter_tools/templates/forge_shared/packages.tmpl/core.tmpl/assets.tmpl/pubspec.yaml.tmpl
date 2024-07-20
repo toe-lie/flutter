@@ -8,7 +8,7 @@ scripts:
   build_runner_build: dart run build_runner build --delete-conflicting-outputs
 
 environment:
-  sdk: '>=3.0.1 <4.0.0'
+  sdk: {{dartSdkVersionBounds}}
 
 dependencies:
   flutter:
@@ -62,7 +62,7 @@ flutter_gen:
       # - snake-case
       # - dot-delimiter
       style: dot-delimiter
-      class_name: FarmSuiteAssets
+      class_name: {{pascalCaseProjectName}}Assets
     exclude: []
 
   fonts:
@@ -70,7 +70,7 @@ flutter_gen:
     enabled: true
     # Optional
     outputs:
-      class_name: FarmSuiteFontFamily
+      class_name: {{pascalCaseProjectName}}FontFamily
 
   colors:
     # Optional

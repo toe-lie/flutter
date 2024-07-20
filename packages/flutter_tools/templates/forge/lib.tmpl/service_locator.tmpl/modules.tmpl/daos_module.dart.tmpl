@@ -1,0 +1,8 @@
+import 'package:base/base.dart';
+import 'package:database/database.dart';
+
+Future<void> provideDaosModule({
+  required {{pascalCaseProjectName}}Database db,
+}) async {
+  getIt.registerFactory<SampleDao>(() => db.sampleDao);
+}

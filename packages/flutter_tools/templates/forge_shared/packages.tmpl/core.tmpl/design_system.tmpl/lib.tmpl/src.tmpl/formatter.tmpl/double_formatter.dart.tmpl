@@ -1,0 +1,18 @@
+import 'package:intl/intl.dart';
+
+extension DoubleFormatter on double {
+  String asString({
+    required String locale,
+  }) {
+    final f = NumberFormat.decimalPattern(locale);
+    return f.format(this);
+  }
+
+  String asCurrencyString({
+    required String locale,
+    required String symbol,
+  }) {
+    final format = NumberFormat.currency(locale: locale, symbol: symbol);
+    return format.format(this);
+  }
+}

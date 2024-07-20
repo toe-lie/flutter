@@ -1,0 +1,29 @@
+import 'package:domain/domain.dart';
+import 'package:flutter/material.dart';
+import 'package:sample/src/sample_list/sample_list.dart';
+import 'components.dart';
+
+class SampleListView extends StatelessWidget {
+  const SampleListView({
+    super.key,
+    required this.items,
+    required this.onSampleListItemEvent,
+  });
+
+  final List<Sample> items;
+  final SampleListItemEventHandler onSampleListItemEvent;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (context, index) {
+        final item = items[index];
+        return SampleListItemView(
+          item: item,
+          onTap: (item) => onSampleListItemEvent(item),
+        );
+      },
+    );
+  }
+}

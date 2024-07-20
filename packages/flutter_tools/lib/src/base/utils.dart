@@ -28,6 +28,15 @@ String camelCase(String str) {
   return str;
 }
 
+String concatenatedCase(String str) {
+  int index = str.indexOf('_');
+  while (index != -1 && index < str.length - 1) {
+    str = str.substring(0, index) + str.substring(index + 1);
+    index = str.indexOf('_');
+  }
+  return str;
+}
+
 /// Convert `fooBar` to `foo-bar`.
 String kebabCase(String str) {
   return _reCase(str, '-');
@@ -45,6 +54,25 @@ String _reCase(String str, String sep) {
   return str.replaceAllMapped(_upperRegex,
       (Match m) => '${m.start == 0 ? '' : sep}${m[0]!.toLowerCase()}');
 }
+
+String pascalCase(String input) {
+  // Remove any non-alphanumeric characters and split by spaces
+  final List<String> words = input
+      .split(RegExp(r'[^a-zA-Z0-9]+'))
+      .map((String word) => word.trim())
+      .toList();
+
+  // Capitalize the first letter of each word and join them
+  final String className = words.map((String word) {
+    if (word.isEmpty) {
+      return '';
+    }
+    return word[0].toUpperCase() + word.substring(1).toLowerCase();
+  }).join();
+
+  return className;
+}
+
 
 abstract interface class CliEnum implements Enum {
   String get cliName;

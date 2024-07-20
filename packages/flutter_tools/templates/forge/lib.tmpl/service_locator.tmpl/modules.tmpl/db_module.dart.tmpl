@@ -1,0 +1,10 @@
+import 'package:base/base.dart';
+import 'package:database/database.dart';
+import 'package:drift_database/drift_database.dart';
+
+Future<void> provideDbModule({
+  required Drift{{pascalCaseProjectName}}Database db,
+}) async {
+  getIt.registerSingleton<Drift{{pascalCaseProjectName}}Database>(db);
+  getIt.registerSingleton<{{pascalCaseProjectName}}Database>(db);
+}

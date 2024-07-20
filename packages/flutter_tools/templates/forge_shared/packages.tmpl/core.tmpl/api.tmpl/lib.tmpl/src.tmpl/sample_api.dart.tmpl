@@ -1,0 +1,8 @@
+import 'dart:io';
+
+import 'package:api/api.dart';
+
+abstract class {{pascalCaseProjectName}}Api {
+  Future<List<SampleRM>> getSamples();
+  Future<SampleRM> getSample({required String id});
+}

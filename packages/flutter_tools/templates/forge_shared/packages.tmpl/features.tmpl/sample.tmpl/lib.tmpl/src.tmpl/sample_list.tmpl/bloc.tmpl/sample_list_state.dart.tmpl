@@ -1,0 +1,24 @@
+part of 'sample_list_bloc.dart';
+
+final class SampleListState extends Equatable {
+  const SampleListState({
+    this.sampleListUiState = const UiStateInitial(),
+  });
+
+  final UiState<List<Sample>> sampleListUiState;
+
+  factory SampleListState.create() {
+    return const SampleListState();
+  }
+
+  @override
+  List<Object> get props => [sampleListUiState];
+
+  SampleListState copyWith({
+    UiState<List<Sample>>? sampleListUiState,
+  }) {
+    return SampleListState(
+      sampleListUiState: sampleListUiState ?? this.sampleListUiState,
+    );
+  }
+}

@@ -1,0 +1,43 @@
+name: drift_database
+description: A starting point for Dart libraries or applications.
+version: 0.0.1
+publish_to: 'none'
+
+scripts:
+  build_runner_build: dart run build_runner build --delete-conflicting-outputs
+  build_runner_watch: dart run build_runner watch --delete-conflicting-outputs
+  drift_analyze: dart run drift_dev analyze
+  drift_identify: dart run drift_dev identify-databases
+  drift_bump_schema: dart run drift_dev schema dump lib/src/drift_farmsuite_database.dart schemas/drift_schema_v3.json
+  drift_generate_migration_steps: dart run drift_dev schema steps schemas/ lib/src/schema_versions.dart
+  drift_generate_migration_test: dart run drift_dev schema generate schemas/ test/generated/
+  drift generate_test_companions: dart run drift_dev schema generate --data-classes --companions schemas/ test/generated/
+
+environment:
+  sdk: {{dartSdkVersionBounds}}
+
+dependencies:
+  flutter:
+    sdk: flutter
+  base:
+    path: ../../core/base
+  preferences:
+    path: ../../core/preferences
+  database:
+    path: ../../core/database
+  domain:
+    path: ../../core/domain
+  drift: ^2.19.1+1
+  sqlite3_flutter_libs: ^0.5.16
+  path_provider: ^2.0.15
+  path: ^1.8.3
+  rxdart: ^0.27.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.2
+  test: ^1.24.1
+  mocktail: ^0.3.0
+  build_runner: ^2.4.8
+  drift_dev: ^2.18.0

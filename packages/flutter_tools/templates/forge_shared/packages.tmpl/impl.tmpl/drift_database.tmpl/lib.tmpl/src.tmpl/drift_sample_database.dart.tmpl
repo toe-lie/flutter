@@ -1,0 +1,36 @@
+import 'package:database/database.dart';
+import 'package:drift/drift.dart';
+import 'tables/tables.dart';
+import 'daos/daos.dart';
+import 'drift_{{concatenatedCaseProjectName}}_database.drift.dart';
+
+@DriftDatabase(
+  tables: [
+    SampleTable,
+  ],
+  daos: [
+    DriftSampleDao,
+  ],
+)
+class Drift{{pascalCaseProjectName}}Database extends $Drift{{pascalCaseProjectName}}Database
+    implements {{pascalCaseProjectName}}Database {
+  Drift{{pascalCaseProjectName}}Database(super.e);
+
+  static const latestSchemaVersion = 1;
+
+  @override
+  int get schemaVersion => latestSchemaVersion;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      beforeOpen: (details) async {
+        await customStatement('PRAGMA foreign_keys = ON');
+      },
+    );
+  }
+
+  @override
+  SampleDao get sampleDao => driftSampleDao;
+
+}

@@ -1,0 +1,9 @@
+import 'dart:async';
+
+import 'package:domain/domain.dart';
+
+abstract class PreferencesDataSource {
+  Future<Sample?> getSample();
+  Stream<Sample?> observeSample();
+  Future<void> putSample(Sample sample);
+}
