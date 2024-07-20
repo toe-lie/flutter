@@ -9,7 +9,7 @@ import 'package:preferences/preferences.dart';
 import '../api_call.dart';
 
 import 'retrofit_client_builder.dart';
-import 'helloforge2_rest_client.dart';
+import '{{concatenatedCaseProjectName}}_rest_client.dart';
 
 const clientIdEnvKey = 'CLIENT_ID';
 const clientSecretEnvKey = 'CLIENT_SECRET';
@@ -20,7 +20,7 @@ class Retrofit{{pascalCaseProjectName}}Api extends {{pascalCaseProjectName}}Api 
     required String apiBaseUrl,
     required String imageUploadUrl,
     required PreferencesDataSource preferencesDataSource,
-    {{pascalCaseProjectName}}RestClient? helloForge_2RestClient,
+    {{pascalCaseProjectName}}RestClient? {{camelCaseProjectName}}RestClient,
     List<Interceptor> interceptors = const [],
     Interceptor? companyHostInterceptor,
     bool useProxyServer = false,
@@ -41,7 +41,7 @@ class Retrofit{{pascalCaseProjectName}}Api extends {{pascalCaseProjectName}}Api 
   @override
   Future<List<SampleRM>> getSamples() async {
     final response = await apiCall<ApiDataResponse<List<SampleRM>>>(
-      () => _helloForge_2RestClient.getSamples(),
+      () => _{{camelCaseProjectName}}RestClient.getSamples(),
     );
     return response.data;
   }
@@ -51,7 +51,7 @@ class Retrofit{{pascalCaseProjectName}}Api extends {{pascalCaseProjectName}}Api 
     required String id,
   }) async {
     final response = await apiCall<ApiDataResponse<SampleRM>>(
-      () => _helloForge_2RestClient.getSample(id: id),
+      () => _{{camelCaseProjectName}}RestClient.getSample(id: id),
     );
     return response.data;
   }

@@ -324,16 +324,21 @@ class Template {
         return;
       }
 
-      final String? finalDestinationPath = renderPath(relativeDestinationPath);
+      String? finalDestinationPath = renderPath(relativeDestinationPath);
       if (finalDestinationPath == null) {
         return;
       }
+
+      if (finalDestinationPath.contains('{{')) {
+        finalDestinationPath =
+            _templateRenderer.renderString(finalDestinationPath, context);
+      }
+
       final File finalDestinationFile = _fileSystem.file(finalDestinationPath);
       final String relativePathForLogging =
           _fileSystem.path.relative(finalDestinationFile.path);
 
       // Step 1: Check if the file needs to be overwritten.
-
       if (finalDestinationFile.existsSync()) {
         if (overwriteExisting) {
           finalDestinationFile.deleteSync(recursive: true);

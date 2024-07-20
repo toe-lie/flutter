@@ -34,8 +34,8 @@ const String kPlatformHelp = 'The platforms supported by this project. '
     'When adding platforms to a plugin project, the pubspec.yaml will be updated with the requested platform. '
     'Adding desktop platforms requires the corresponding desktop config setting to be enabled.';
 
-class ForgeCommand extends CreateBase {
-  ForgeCommand({
+class ForgeObsoletedCommand extends CreateBase {
+  ForgeObsoletedCommand({
     super.verboseHelp = false,
   }) {
     addPlatformsOptions(customHelp: kPlatformHelp);
@@ -66,7 +66,7 @@ class ForgeCommand extends CreateBase {
   }
 
   @override
-  final String name = 'forge';
+  final String name = 'forge-obsoleted';
 
   @override
   final String description = 'Create a new Flutter project.\n\n'
