@@ -1,0 +1,31 @@
+import 'package:base/base.dart';
+{{#hasNonPrimitive}}
+import 'package:domain/domain.dart';
+{{/hasNonPrimitive}}
+
+class {{className}} extends Equatable {
+  const {{className}}({
+    {{#fields}}
+    required this.{{name}},
+    {{/fields}}
+  });
+
+  {{#fields}}
+  final {{type}} {{name}};
+  {{/fields}}
+
+  @override
+  List<Object> get props => [{{#fields}}{{name}}, {{/fields}}];
+
+  {{className}} copyWith({
+    {{#fields}}
+    {{type}}? {{name}},
+    {{/fields}}
+  }) {
+    return {{className}}(
+      {{#fields}}
+      {{name}}: {{name}} ?? this.{{name}},
+      {{/fields}}
+    );
+  }
+}
