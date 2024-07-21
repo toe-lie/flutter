@@ -20,6 +20,7 @@ import '../template.dart';
 import 'create_base.dart';
 import 'forge_create_data_class.dart';
 import 'forge_create_project.dart';
+import 'forge_create_use_case.dart';
 
 class ForgeCreateCommand extends FlutterCommand {
   ForgeCreateCommand({
@@ -33,6 +34,11 @@ class ForgeCreateCommand extends FlutterCommand {
       fileSystem: fileSystem,
     ));
     _addSubcommand(ForgeCreateDataClassCommand(
+      logger: logger,
+      verboseHelp: verboseHelp,
+      fileSystem: fileSystem,
+    ));
+    _addSubcommand(ForgeCreateUseCaseCommand(
       logger: logger,
       verboseHelp: verboseHelp,
       fileSystem: fileSystem,
@@ -76,6 +82,123 @@ abstract class ForgeCreateSubCommand extends FlutterCommand {
   bool get reportNullSafety => true;
 
   bool get supported => true;
+
+
+  final List<String> primitiveTypes = <String>[
+    'int', 'double', 'String', 'bool',
+    'List', 'Set', 'Map', 'DateTime', 'dynamic'
+  ];
+
+  bool isPrimitive(String type) {
+    if (primitiveTypes.contains(type)) {
+      return true;
+    }
+
+    // Handle generic types like List<int>
+    final RegExpMatch? listMatch = RegExp(r'List<(.+)>').firstMatch(type);
+    if (listMatch != null) {
+      return isPrimitive(listMatch.group(1)!);
+    }
+
+    final RegExpMatch? setMatch = RegExp(r'Set<(.+)>').firstMatch(type);
+    if (setMatch != null) {
+      return isPrimitive(setMatch.group(1)!);
+    }
+
+    final RegExpMatch? mapMatch = RegExp(r'Map<(.+), (.+)>').firstMatch(type);
+    if (mapMatch != null) {
+      return isPrimitive(mapMatch.group(1)!) && isPrimitive(mapMatch.group(2)!);
+    }
+
+    return false;
+  }
+
+  @protected
+  String readTemplateContent(String absoluteSourcePath) {
+    final String flutterToolsAbsolutePath = globals.fs.path.join(
+      Cache.flutterRoot!,
+      'packages',
+      'flutter_tools',
+    );
+
+    final File sourceFile = fileSystem.file(absoluteSourcePath);
+    return sourceFile.readAsStringSync();
+  }
+
+  /// Determines the project type in an existing flutter project.
+  ///
+  /// If it has a .metadata file with the project_type in it, use that.
+  /// If it has an android dir and an android/app dir, it's a legacy app
+  /// If it has an ios dir and an ios/Flutter dir, it's a legacy app
+  /// Otherwise, we don't presume to know what type of project it could be, since
+  /// many of the files could be missing, and we can't really tell definitively.
+  ///
+  /// Throws assertion if [projectDir] does not exist or empty.
+  /// Returns null if no project type can be determined.
+  @protected
+  ForgeProjectType? determineTemplateType() {
+    assert(projectDir.existsSync() && projectDir.listSync().isNotEmpty);
+    final File metadataFile = globals.fs
+        .file(globals.fs.path.join(projectDir.absolute.path, '.metadata'));
+    final ForgeProjectMetadata projectMetadata =
+    ForgeProjectMetadata(metadataFile, globals.logger);
+    final ForgeProjectType? projectType = projectMetadata.projectType;
+    if (projectType != null) {
+      return projectType;
+    }
+
+    bool exists(List<String> path) {
+      return globals.fs
+          .directory(globals.fs.path
+          .joinAll(<String>[projectDir.absolute.path, ...path]))
+          .existsSync();
+    }
+
+    // There either wasn't any metadata, or it didn't contain the project type,
+    // so try and figure out what type of project it is from the existing
+    // directory structure.
+    if (exists(<String>['android', 'app']) ||
+        exists(<String>['ios', 'Runner']) ||
+        exists(<String>['ios', 'Flutter'])) {
+      return ForgeProjectType.app;
+    }
+    // Since we can't really be definitive on nearly-empty directories, err on
+    // the side of prudence and just say we don't know.
+    return null;
+  }
+
+  ForgeProjectType getProjectType(Directory projectDir, {ForgeProjectType? template}) {
+    ForgeProjectType? detectedProjectType;
+    final bool metadataExists =
+    projectDir.absolute.childFile('.metadata').existsSync();
+
+    logger.printStatus('ProjectDir: ${projectDir.absolute.path}');
+
+    // If the project directory exists and isn't empty, then try to determine the template
+    // type from the project directory.
+    if (projectDir.existsSync() && projectDir.listSync().isNotEmpty) {
+      detectedProjectType = determineTemplateType();
+      if (detectedProjectType == null && metadataExists) {
+        // We can only be definitive that this is the wrong type if the .metadata file
+        // exists and contains a type that we don't understand, or doesn't contain a type.
+        throwToolExit(
+            'Sorry, unable to detect the type of project to recreate. '
+                'Try creating a fresh project and migrating your existing code to '
+                'the new project manually.');
+      }
+    }
+    template ??= detectedProjectType ?? ForgeProjectType.unknown;
+    if (detectedProjectType != null &&
+        template != detectedProjectType &&
+        metadataExists) {
+      // We can only be definitive that this is the wrong type if the .metadata file
+      // exists and contains a type that doesn't match.
+      throwToolExit(
+          "The requested template type '${template.cliName}' doesn't match the "
+              "existing template type of '${detectedProjectType.cliName}'.");
+    }
+    return template;
+  }
 
   /// Whether [name] is a valid Pub package.
   @visibleForTesting
@@ -165,6 +288,24 @@ abstract class ForgeCreateSubCommand extends FlutterCommand {
   @protected
   String get projectDirPath {
     return globals.fs.path.normalize(projectDir.absolute.path);
+  }
+
+  @protected
+  String get flutterToolsAbsolutePath {
+    return globals.fs.path.join(
+      Cache.flutterRoot!,
+      'packages',
+      'flutter_tools',
+    );
+  }
+
+  @protected
+  void appendTextToFile(File file, String text) {
+    if (!file.existsSync()) {
+      file.createSync(recursive: true);
+    }
+
+    file.writeAsStringSync(text, mode: FileMode.append);
   }
 
   /// Creates a template to use for [renderTemplate].

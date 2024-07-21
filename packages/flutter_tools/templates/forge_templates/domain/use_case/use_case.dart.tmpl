@@ -1,0 +1,22 @@
+import 'package:domain/domain.dart';
+import 'package:base/base.dart';
+
+class {{useCaseClass}}Request extends Equatable {
+  const {{useCaseClass}}Request();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class {{useCaseClass}} {
+  {{useCaseClass}}({
+    {{modelRepository}}? {{repositoryInstance}},
+  }) : _{{repositoryInstance}} =
+        {{repositoryInstance}} ?? getIt();
+
+  final {{modelRepository}} _{{repositoryInstance}};
+
+  {{returnType}} call({{useCaseClass}}Request request) {
+    return _{{repositoryInstance}}.{{useCaseMethod}}();
+  }
+}

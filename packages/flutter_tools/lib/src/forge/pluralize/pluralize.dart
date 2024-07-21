@@ -1,0 +1,1 @@
+export 'src/pluralize.dart';

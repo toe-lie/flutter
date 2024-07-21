@@ -1,0 +1,112 @@
+Thank you. I also would like to automatically generate the use case code.
+But I'll we a little bit complex. Oor our project structure is
+
+/project-name/packages/core/domain/lib/src/use_case/observe_samples_use_case.dart
+import 'package:domain/domain.dart';
+import 'package:base/base.dart';
+
+class ObserveSamplesUseCaseRequest extends Equatable {
+  const ObserveSamplesUseCaseRequest();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class ObserveSamplesUseCase {
+  ObserveSamplesUseCase({
+    SampleRepository? sampleRepository,
+  }) : _sampleRepository =
+      sampleRepository ?? getIt();
+
+  final SampleRepository _sampleRepository;
+
+  Stream<Result<List<Sample>>> call(ObserveSamplesUseCaseRequest request) {
+    return _sampleRepository.observeSamples();
+  }
+}
+
+/project-name/packages/core/domain/lib/src/use_case/use_case.dart
+export 'observe_samples_use_case.dart';
+
+/project-name/packages/core/domain/lib/src/repositories/sample_repository.dart
+import 'package:base/base.dart';
+import 'package:domain/domain.dart';
+
+abstract class SampleRepository {
+  Stream<Result<List<Sample>>> observeSamples();
+  Stream<Result<Sample>> observeSample({
+    required String sampleId,
+  });
+}
+
+/project-name/packages/core/domain/lib/src/repositories/repositories.dart
+extends 'sample_repository.dart';
+
+/project-name/packages/core/domain/lib/src/models/sample_repository.dart
+
+Could you please help a simple dart code generator programming using mustache templating?
+The command will be ...
+flutter-create use-case .
+Firstly, we ask the user for the directory to generate the use case.
+We will list the directory and it's directories inside the
+/project-name/packages/core/domain/lib/src/use_case directory as options.
+1. . [Default use case directory]
+2. directory1
+3. directory2
+4. directory1/directory11
+.
+.
+.
+.quit: *Abort or *Exit
+
+If the user type words instead of above option number we will keep and will create a new package name.
+
+Then we ask user what type of use case:
+1. observe
+2. get
+3. create
+4. update
+5. delete
+6. other
+If the user chose other, we will ask the user to type use case type.
+
+Then we will let the user choose the existing models including in subdirectories from
+/project-name/packages/core/domain/lib/src/models as options
+
+1. SampleModel1
+2. SampleModel2
+.
+.
+.
+0. Create a new model
+.quit: *Abort or *Exit
+
+If you choose to create new model,
+We will list the directory and it's directories inside the
+/project-name/packages/core/domain/lib/src/models directory as options.
+1. . [Default use case directory]
+2. directory1
+3. directory2
+4. directory1/directory11
+.
+.
+.
+.quit: *Abort or *Exit
+If the user type words instead of above option number we will take note to create a new package.
+
+Then, we will ask the user the result will be enclosed in Result model? This will be yes or no question.
+
+Then, we will ask the user the return type of the model. The user can type pure model name like user or List<User>.
+If the user enter in List<User>, we need to extract the model, User.
+
+Then, we ask the user to enter fields till the user stop.
+The filed will be in name:type format or name:type? for nullable.
+
+Then we will check the abstract repository for that use case in /project-name/packages/core/domain/lib/src/repositories
+by combining model name with suffix repository.dart.
+
+If the repository doesn't exist yet, we create one with the method to use in use case with name format usecasetype + model name or name in plural case if List.
+If the repository existing, we just put the method to existing repository.
+
+
+

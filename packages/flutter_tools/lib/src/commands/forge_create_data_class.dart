@@ -57,35 +57,6 @@ class ForgeCreateDataClassCommand extends ForgeCreateSubCommand {
   @protected
   String get flutterRoot => Cache.flutterRoot!;
 
-  final List<String> primitiveTypes = <String>[
-    'int', 'double', 'String', 'bool',
-    'List', 'Set', 'Map', 'DateTime', 'dynamic'
-  ];
-
-  bool isPrimitive(String type) {
-    if (primitiveTypes.contains(type)) {
-      return true;
-    }
-
-    // Handle generic types like List<int>
-    final RegExpMatch? listMatch = RegExp(r'List<(.+)>').firstMatch(type);
-    if (listMatch != null) {
-      return isPrimitive(listMatch.group(1)!);
-    }
-
-    final RegExpMatch? setMatch = RegExp(r'Set<(.+)>').firstMatch(type);
-    if (setMatch != null) {
-      return isPrimitive(setMatch.group(1)!);
-    }
-
-    final RegExpMatch? mapMatch = RegExp(r'Map<(.+), (.+)>').firstMatch(type);
-    if (mapMatch != null) {
-      return isPrimitive(mapMatch.group(1)!) && isPrimitive(mapMatch.group(2)!);
-    }
-
-    return false;
-  }
-
   @override
   Future<FlutterCommandResult> runCommand() async {
     logger.printStatus('Creating a data class...');
