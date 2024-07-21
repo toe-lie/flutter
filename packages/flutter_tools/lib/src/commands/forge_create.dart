@@ -20,6 +20,7 @@ import '../template.dart';
 import 'create_base.dart';
 import 'forge_create_data_class.dart';
 import 'forge_create_project.dart';
+import 'forge_create_screen.dart';
 import 'forge_create_use_case.dart';
 
 class ForgeCreateCommand extends FlutterCommand {
@@ -29,6 +30,11 @@ class ForgeCreateCommand extends FlutterCommand {
     bool verboseHelp = false,
   }) {
     _addSubcommand(ForgeCreateProjectCommand(
+      logger: logger,
+      verboseHelp: verboseHelp,
+      fileSystem: fileSystem,
+    ));
+    _addSubcommand(ForgeCreateScreenCommand(
       logger: logger,
       verboseHelp: verboseHelp,
       fileSystem: fileSystem,

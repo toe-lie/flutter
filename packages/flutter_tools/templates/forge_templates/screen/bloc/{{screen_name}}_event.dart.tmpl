@@ -1,0 +1,16 @@
+part of '{{bloc_file}}';
+
+sealed class {{event_base_class}} extends Equatable {
+  const {{event_base_class}}();
+}
+
+class {{event_fetched_class}} extends {{event_base_class}} {
+  const {{event_fetched_class}}(
+    this.{{sample_id}},
+  );
+
+  final String {{sample_id}};
+
+  @override
+  List<Object> get props => [{{sample_id}}];
+}

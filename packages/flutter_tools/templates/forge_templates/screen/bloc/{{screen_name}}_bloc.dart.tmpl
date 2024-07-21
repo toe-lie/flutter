@@ -1,0 +1,48 @@
+import 'dart:async';
+
+import 'package:base/base.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:domain/domain.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ui/ui.dart';
+
+part '{{event_file}}';
+part '{{state_file}}';
+
+class {{bloc_class}} extends Bloc<{{event_base_class}}, {{state_class}}> {
+  {{bloc_class}}({
+    required String {{sample_id}},
+    ObserveSampleUseCase? observeSampleUseCase,
+  })  : _observeSampleUseCase = observeSampleUseCase ?? getIt(),
+        super({{state_class}}({{sample_id}}: {{sample_id}})) {
+    on<{{event_fetched_class}}>(
+      _handleDetailFetched,
+      transformer: restartable(),
+    );
+  }
+
+  final ObserveSampleUseCase _observeSampleUseCase;
+
+  FutureOr<void> _handleDetailFetched(
+      {{event_fetched_class}} event,
+    Emitter<{{state_class}}> emit,
+  ) async {
+    emit(
+      state.copyWith(
+        sampleUiState: const UiStateInProgress(),
+      ),
+    );
+
+    await emit.forEach(
+      _observeSampleUseCase(ObserveSampleUseCaseRequest(
+        {{sample_id}}: event.{{sample_id}},
+      )),
+      onData: (result) => state.copyWith(
+        sampleUiState: UiState.fromResult(result),
+      ),
+      onError: (e, s) => state.copyWith(
+        sampleUiState: UiStateFailure.fromError(e),
+      ),
+    );
+  }
+}

@@ -1,0 +1,35 @@
+part of '{{bloc_file}}';
+
+final class {{state_class}} extends Equatable {
+  const {{state_class}}({
+    required this.{{sample_id}},
+    this.sampleUiState = const UiStateInitial(),
+  });
+
+  final String {{sample_id}};
+  final UiState<Sample> sampleUiState;
+
+  factory {{state_class}}.create({
+    required String {{sample_id}},
+  }) {
+    return {{state_class}}(
+      {{sample_id}}: {{sample_id}},
+    );
+  }
+
+  @override
+  List<Object> get props => [
+        {{sample_id}},
+        sampleUiState,
+      ];
+
+  {{state_class}} copyWith({
+    String? {{sample_id}},
+    UiState<Sample>? sampleUiState,
+  }) {
+    return {{state_class}}(
+      {{sample_id}}: {{sample_id}} ?? this.{{sample_id}},
+      sampleUiState: sampleUiState ?? this.sampleUiState,
+    );
+  }
+}
